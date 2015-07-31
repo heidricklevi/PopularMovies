@@ -2,18 +2,19 @@ package com.heidritech.popularmovies;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -67,12 +68,36 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class FetchMovieData extends AsyncTask<Void, Void, Void>
+    public class FetchMovieData extends AsyncTask<Void, Void, String[]>
     {
-        @Override
-        protected Void doInBackground(Void... params) {
+        public String [] movieJsonData(String movieJsonStr) throws JSONException
+        {
+            String [] resultStr = {" "};
+            final String MDB_RESULTS = "results";
+            final String MDB_POSTER_PATH ="poster_path";
 
-            final String API_KEY = " ";
+            JSONObject movieJson = new JSONObject(movieJsonStr);
+            JSONArray resultsArray = movieJson.getJSONArray(MDB_RESULTS);
+
+            for (int i = 0; i < resultsArray.length(); i++)
+            {
+                JSONObject movie = resultsArray.getJSONObject(i);
+                resultStr[i] = movie.getString(MDB_POSTER_PATH);
+            }
+
+            for (String s : resultStr) {
+                Log.v(LOG_TAG, "Movie: " + s);
+            }
+            return resultStr;
+        }
+
+        private final String LOG_TAG = FetchMovieData.class.getSimpleName();
+
+        @Override
+        protected String [] doInBackground(Void... params)
+        {
+
+            final String API_KEY = "";
             final String image_BaseUrl = "http://image.tmdb.org/t/p/w185/";
 /*
             final String API_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=[------]";
@@ -137,8 +162,16 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
 
+            try {
+                return movieJsonData(movieJsonStr);
+            } catch (JSONException e) {
+
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
+            }
 
             return null;
         }
+
     }
 }
