@@ -1,27 +1,13 @@
 package com.heidritech.popularmovies;
 
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -43,7 +29,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        FetchMovieData fetchMovieData = new FetchMovieData();
+
     }
 
     @Override
@@ -68,8 +54,11 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class FetchMovieData extends AsyncTask<Void, Void, String[]>
+ /*   public class FetchMovieData extends AsyncTask<Void, Void, String[]>
     {
+
+        private final String LOG_TAG = FetchMovieData.class.getSimpleName();
+
         public String [] movieJsonData(String movieJsonStr) throws JSONException
         {
             String [] resultStr = {" "};
@@ -91,17 +80,16 @@ public class MainActivity extends ActionBarActivity {
             return resultStr;
         }
 
-        private final String LOG_TAG = FetchMovieData.class.getSimpleName();
 
         @Override
         protected String [] doInBackground(Void... params)
         {
 
-            final String API_KEY = "";
+            final String API_KEY = "13ebc35e0c6a99a673ac605b5e7f3710";
             final String image_BaseUrl = "http://image.tmdb.org/t/p/w185/";
-/*
+*//*
             final String API_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=[------]";
-*/
+*//*
             final String apiBaseUrl = "http://api.themoviedb.org/3/discover/movie?";
 
             HttpURLConnection urlConnection = null;
@@ -172,6 +160,6 @@ public class MainActivity extends ActionBarActivity {
 
             return null;
         }
-
-    }
+*///
+    //}
 }
