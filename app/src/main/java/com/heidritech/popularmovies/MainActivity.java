@@ -9,17 +9,35 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+
 
 public class MainActivity extends ActionBarActivity {
 
-
+    private GridView gridView;
+    private ImageAdapter movieAdapter;
+    private TMDBClient client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        GridView gridView;
         gridView = (GridView) findViewById(R.id.gridview );
-        gridView.setAdapter(new ImageAdapter(this));
+        ArrayList<MovieObj> aMovies = new ArrayList<>();
+        gridView.setAdapter(new ImageAdapter(this, aMovies));
+        try {
+            fetchMovieData();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -30,6 +48,38 @@ public class MainActivity extends ActionBarActivity {
         });
 
 
+    }
+
+    private void fetchMovieData() throws MalformedURLException {
+        client = new TMDBClient();
+        client.getMovies(new JsonHttpResponseHandler()
+        {
+            /**
+             * Returns when request succeeds
+             *
+             * @param statusCode http response status line
+             * @param headers    response headers if any
+             * @param response   parsed response if any
+             */
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                JSONArray jsonArray = null;
+
+                try {
+                    jsonArray = response.getJSONArray("results");
+                    ArrayList<MovieObj> movies = MovieObj.fromJsonArray(jsonArray);
+                    for (MovieObj movie : movies)
+                    {
+                        movieAdapter.add(movie);
+                    }
+
+                    movieAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override

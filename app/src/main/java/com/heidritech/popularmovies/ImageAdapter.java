@@ -4,56 +4,43 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 /**
  * Created by Levi on 7/28/2015.
  */
-public class ImageAdapter extends BaseAdapter {
-    Context mContext;
+public class ImageAdapter extends ArrayAdapter<MovieObj> {
+    private ArrayList<MovieObj> movies;
+    private String imageBaseUrl = "http://image.tmdb.org/t/p/w185/";
 
-    public ImageAdapter(Context context)
+    public ImageAdapter(Context context, ArrayList<MovieObj> aMovie)
     {
-        mContext = context;
+        super(context, 0, aMovie);
     }
 
     @Override
-    public int getCount() {
-        return imgId.length;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return position;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
 
         ImageView imageView;
-        View rowView;
-        LayoutInflater inflater = ( LayoutInflater )mContext.
-                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        MovieObj movie = movies.get(position);
 
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
-            rowView = inflater.inflate(R.layout.image_cell, null);
-            imageView = (ImageView) rowView.findViewById(R.id.imageView1);
-        } else {
-            imageView = (ImageView) convertView;
+
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.image_cell, parent, false);
         }
 
-        imageView.setImageResource(imgId[position]);
-        //http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg
+        imageView = (ImageView) convertView.findViewById(R.id.imageView1);
 
-        //Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg").into(imageView);
+        //http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg
+        Picasso.with(getContext()).load(imageBaseUrl + movie.getPoster_path()).into(imageView);
 
         return imageView;
     }
