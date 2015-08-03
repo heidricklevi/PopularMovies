@@ -44,19 +44,4 @@ public class ImageAdapter extends ArrayAdapter<MovieObj> {
 
         return imageView;
     }
-
-    private int [] imgId =
-            {
-                R.drawable.no_poseter_found,R.drawable.sample_2, R.drawable.sample_3,
-                    R.drawable.sample_4, R.drawable.sample_5,
-                    R.drawable.sample_6, R.drawable.sample_7,
-                    R.drawable.sample_0, R.drawable.sample_1,
-                    R.drawable.sample_2, R.drawable.sample_3,
-                    R.drawable.sample_4, R.drawable.sample_5,
-                    R.drawable.sample_6, R.drawable.sample_7,
-                    R.drawable.sample_0, R.drawable.sample_1,
-                    R.drawable.sample_2, R.drawable.sample_3,
-                    R.drawable.sample_4, R.drawable.sample_5,
-                    R.drawable.sample_6, R.drawable.sample_7
-            };
 }
