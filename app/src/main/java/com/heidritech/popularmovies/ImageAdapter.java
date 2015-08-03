@@ -20,7 +20,7 @@ public class ImageAdapter extends ArrayAdapter<MovieObj> {
 
     public ImageAdapter(Context context, ArrayList<MovieObj> aMovie)
     {
-        super(context, 0, new ArrayList<MovieObj>(aMovie));
+        super(context, 0, aMovie);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ImageAdapter extends ArrayAdapter<MovieObj> {
 
         ImageView imageView;
 
-        MovieObj movie = movies.get(position);
+        MovieObj movie = getItem(position);
 
         if (convertView == null) {
             // if it's not recycled, initialize some attributes

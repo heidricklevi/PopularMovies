@@ -32,7 +32,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         gridView = (GridView) findViewById(R.id.gridview );
         ArrayList<MovieObj> aMovies = new ArrayList<>();
-        gridView.setAdapter(new ImageAdapter(getApplicationContext(), aMovies));
+        movieAdapter = new ImageAdapter(this,aMovies);
+        gridView.setAdapter(movieAdapter);
         try {
             fetchMovieData();
         } catch (MalformedURLException e) {
@@ -71,9 +72,7 @@ public class MainActivity extends ActionBarActivity {
                     jsonArray = response.getJSONArray("results");
                     ArrayList<MovieObj> movies = MovieObj.fromJsonArray(jsonArray);
                     for (MovieObj movie : movies)
-                    {
                         movieAdapter.add(movie);
-                    }
 
                     movieAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
