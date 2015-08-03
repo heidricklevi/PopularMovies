@@ -25,13 +25,14 @@ public class MainActivity extends ActionBarActivity {
     private GridView gridView;
     private ImageAdapter movieAdapter;
     private TMDBClient client;
+    private int resource;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         gridView = (GridView) findViewById(R.id.gridview );
         ArrayList<MovieObj> aMovies = new ArrayList<>();
-        gridView.setAdapter(new ImageAdapter(this, aMovies));
+        gridView.setAdapter(new ImageAdapter(getApplicationContext(), aMovies));
         try {
             fetchMovieData();
         } catch (MalformedURLException e) {

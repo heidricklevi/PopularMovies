@@ -20,7 +20,7 @@ public class ImageAdapter extends ArrayAdapter<MovieObj> {
 
     public ImageAdapter(Context context, ArrayList<MovieObj> aMovie)
     {
-        super(context, 0, aMovie);
+        super(context, 0, new ArrayList<MovieObj>(aMovie));
     }
 
     @Override
