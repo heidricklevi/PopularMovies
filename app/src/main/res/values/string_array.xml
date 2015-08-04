@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="temp_item_pref">
+        <item>@string/pref_sort_highest_rated</item>
+        <item>@string/pref_sort_pop</item>
+    </string-array>
+    <string-array name="temp_item_values">
+        <item>@string/pref_sort_highest_rated</item>
+        <item>@string/pref_sort_pop</item>
+    </string-array>
+</resources>

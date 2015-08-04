@@ -1,6 +1,9 @@
 package com.heidritech.popularmovies;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,6 +56,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void fetchMovieData() throws MalformedURLException {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final String string = sharedPreferences.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_pop));
+
         client = new TMDBClient();
         client.getMovies(new JsonHttpResponseHandler()
         {
@@ -71,6 +77,19 @@ public class MainActivity extends ActionBarActivity {
                 try {
                     jsonArray = response.getJSONArray("results");
                     ArrayList<MovieObj> movies = MovieObj.fromJsonArray(jsonArray);
+                    if (string.equals(getString(R.string.pref_sort_highest_rated)))
+                    {
+                        for (int i = 0; i < movies.size(); i++)
+                        {
+                            MovieObj temp = movies.get(i);
+                            double max = 0.0;
+                            if (max <= temp.getVote_average())
+                            {
+                                movies.set(i, temp);
+                            }
+                        }
+                    }
+
                     for (MovieObj movie : movies)
                         movieAdapter.add(movie);
 
@@ -98,6 +117,9 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+
+            startActivity(intent);
             return true;
         }
 

@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_sort_key">sort_by</string>
+    <string name="pref_sort_pop">popularity.asc</string>
+    <string name="pref_sort_highest_rated">vote_average.desc</string>
 </resources>
