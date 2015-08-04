@@ -73,6 +73,7 @@ public class MainActivity extends ActionBarActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 JSONArray jsonArray = null;
+                double max = 0.0;
 
                 try {
                     jsonArray = response.getJSONArray("results");
@@ -82,9 +83,9 @@ public class MainActivity extends ActionBarActivity {
                         for (int i = 0; i < movies.size(); i++)
                         {
                             MovieObj temp = movies.get(i);
-                            double max = 0.0;
                             if (max <= temp.getVote_average())
                             {
+                                max = temp.getVote_average();
                                 movies.set(i, temp);
                             }
                         }
