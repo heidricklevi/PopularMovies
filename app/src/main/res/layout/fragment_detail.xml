@@ -4,7 +4,9 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.heidritech.popularmovies.DetailActivityFragment">
+    tools:context="com.heidritech.popularmovies.DetailActivityFragment"
+    android:backgroundTint="@color/background_floating_material_dark"
+    android:background="@color/link_text_material_light">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -17,10 +19,93 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="137dp"
-        android:layout_marginEnd="137dp"
-        android:layout_marginBottom="84dp">
+        android:layout_marginRight="207dp"
+        android:layout_marginEnd="207dp"
+        android:layout_marginBottom="263dp"
+        android:layout_marginTop="75dp"
+        android:layout_alignParentTop="true">
     </ImageView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="false"
+        android:id="@+id/scrollView"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/movie_release_date"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="38dp"
+            android:id="@+id/relativeLayout">
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/movie_overview"
+        android:text="overview"
+        android:layout_marginRight="26dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="181dp"
+        android:layout_alignRight="@+id/imageView2"
+        android:layout_alignEnd="@+id/imageView2"
+        android:layout_alignBottom="@+id/scrollView" />
+
+    <TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:textAppearance="?android:attr/textAppearanceSmall"
+android:id="@+id/movie_user_rating"
+        android:text="rating"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginBottom="40dp"
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_alignLeft="@+id/movie_release_date"
+        android:layout_alignStart="@+id/movie_release_date" />
+    <View
+        android:id="@+id/hline1"
+        android:layout_width="fill_parent"
+        android:layout_height="5dip"
+        android:layout_marginBottom="28dp"
+        android:background="#000000"
+        android:layout_above="@+id/movie_overview"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/movie_title"
+        tools:ignore="UnknownId"
+        android:text="title"
+        android:layout_toEndOf="@+id/movie_overview"
+        android:layout_marginLeft="56dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginBottom="50dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignTop="@+id/imageView2" />
+
+    <TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:id="@+id/movie_release_date"
+android:text="release"
+        android:layout_above="@+id/movie_user_rating"
+        android:layout_alignStart="@+id/movie_title"
+        android:layout_marginBottom="31dp" />
 
 
 </RelativeLayout>

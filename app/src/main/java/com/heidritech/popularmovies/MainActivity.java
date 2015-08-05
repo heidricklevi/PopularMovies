@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
@@ -45,8 +46,8 @@ public class MainActivity extends ActionBarActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                String text = String.valueOf(movieAdapter.getItem(position));
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, text);
+                MovieObj iMovie = movieAdapter.getItem(position);
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class).putExtra("MovieObject", iMovie);
                 startActivity(intent);
             }
         });

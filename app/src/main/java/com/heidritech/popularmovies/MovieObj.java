@@ -4,17 +4,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Levi James H on 7/31/2015.
  */
-public class MovieObj {
+public class MovieObj implements Serializable {
 
     private String poster_path;
     private String original_title;
     private String overview;
-    private double vote_average;
+    private String vote_average;
     private String release_date;
 
     public String getPoster_path() {
@@ -29,7 +30,7 @@ public class MovieObj {
         return overview;
     }
 
-    public double getVote_average() {
+    public String getVote_average() {
         return vote_average;
     }
 
@@ -51,7 +52,7 @@ public class MovieObj {
         movie.overview = jsonObject.getString("overview");
         movie.poster_path = jsonObject.getString("poster_path");
         movie.release_date = jsonObject.getString("release_date");
-        movie.vote_average = jsonObject.getDouble("vote_average");
+        movie.vote_average = jsonObject.getString("vote_average");
 
         return movie;
 
