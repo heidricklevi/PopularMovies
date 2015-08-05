@@ -14,7 +14,6 @@ import java.net.URL;
 public class TMDBClient {
     private final String API_KEY = "13ebc35e0c6a99a673ac605b5e7f3710";
     private final String image_BaseUrl = "http://image.tmdb.org/t/p/w185/";
-    private final String API_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=[------]";
     private final String apiBaseUrl = "http://api.themoviedb.org/3/discover/movie?";
     private AsyncHttpClient client;
 

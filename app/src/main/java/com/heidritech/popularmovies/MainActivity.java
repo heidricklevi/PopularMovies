@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -43,12 +42,12 @@ public class MainActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(MainActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
+                String text = String.valueOf(movieAdapter.getItem(position));
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, text);
+                startActivity(intent);
             }
         });
 
@@ -78,18 +77,6 @@ public class MainActivity extends ActionBarActivity {
                 try {
                     jsonArray = response.getJSONArray("results");
                     ArrayList<MovieObj> movies = MovieObj.fromJsonArray(jsonArray);
-                    if (string.equals(getString(R.string.pref_sort_highest_rated)))
-                    {
-                        for (int i = 0; i < movies.size(); i++)
-                        {
-                            MovieObj temp = movies.get(i);
-                            if (max <= temp.getVote_average())
-                            {
-                                max = temp.getVote_average();
-                                movies.set(i, temp);
-                            }
-                        }
-                    }
 
                     for (MovieObj movie : movies)
                         movieAdapter.add(movie);
@@ -127,112 +114,5 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
- /*   public class FetchMovieData extends AsyncTask<Void, Void, String[]>
-    {
 
-        private final String LOG_TAG = FetchMovieData.class.getSimpleName();
-
-        public String [] movieJsonData(String movieJsonStr) throws JSONException
-        {
-            String [] resultStr = {" "};
-            final String MDB_RESULTS = "results";
-            final String MDB_POSTER_PATH ="poster_path";
-
-            JSONObject movieJson = new JSONObject(movieJsonStr);
-            JSONArray resultsArray = movieJson.getJSONArray(MDB_RESULTS);
-
-            for (int i = 0; i < resultsArray.length(); i++)
-            {
-                JSONObject movie = resultsArray.getJSONObject(i);
-                resultStr[i] = movie.getString(MDB_POSTER_PATH);
-            }
-
-            for (String s : resultStr) {
-                Log.v(LOG_TAG, "Movie: " + s);
-            }
-            return resultStr;
-        }
-
-
-        @Override
-        protected String [] doInBackground(Void... params)
-        {
-
-            final String API_KEY = "13ebc35e0c6a99a673ac605b5e7f3710";
-            final String image_BaseUrl = "http://image.tmdb.org/t/p/w185/";
-*//*
-            final String API_URL = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=[------]";
-*//*
-            final String apiBaseUrl = "http://api.themoviedb.org/3/discover/movie?";
-
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-
-            // Will contain the raw JSON response as a string.
-            String movieJsonStr = null;
-            try {
-                Uri.Builder builtUri = Uri.parse(apiBaseUrl).buildUpon()
-                        .appendQueryParameter("sort_by", "popularity.desc")
-                        .appendQueryParameter("api_key", API_KEY);
-                builtUri.build();
-
-                URL url = new URL(builtUri.toString());
-
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
-
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null)
-                {
-                    return null;
-                }
-
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null)
-                {
-                    buffer.append(line);
-                }
-
-                if (buffer.length() == 0)
-                {
-                    return null;
-                }
-
-                movieJsonStr = buffer.toString();
-
-
-            }
-            catch (Exception e)
-            {
-                Log.e("AsyncTaskDoInBackground", "Error", e);
-
-            }
-            finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e("ForecastFragment", "Error closing stream", e);
-                }
-            }
-
-            try {
-                return movieJsonData(movieJsonStr);
-            } catch (JSONException e) {
-
-                Log.e(LOG_TAG, e.getMessage(), e);
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-*///
-    //}
 }
