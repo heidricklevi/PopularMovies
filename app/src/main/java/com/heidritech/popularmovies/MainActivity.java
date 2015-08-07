@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -18,7 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
@@ -55,11 +55,24 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+
+    /**
+     * Dispatch onStart() to all fragments.  Ensure any created loaders are
+     * now started.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rLayout);
+        relativeLayout.setVisibility(gridView.VISIBLE);
+    }
+
     private void fetchMovieData() throws MalformedURLException {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         final String string = sharedPreferences.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_pop));
 
         client = new TMDBClient();
+
         client.getMovies(new JsonHttpResponseHandler()
         {
             /**
@@ -73,7 +86,6 @@ public class MainActivity extends ActionBarActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 JSONArray jsonArray = null;
-                double max = 0.0;
 
                 try {
                     jsonArray = response.getJSONArray("results");
