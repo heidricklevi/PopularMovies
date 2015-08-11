@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -21,6 +20,8 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -56,16 +57,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    /**
-     * Dispatch onStart() to all fragments.  Ensure any created loaders are
-     * now started.
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.rLayout);
-        relativeLayout.setVisibility(gridView.VISIBLE);
-    }
 
     private void fetchMovieData() throws MalformedURLException {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -91,6 +82,16 @@ public class MainActivity extends ActionBarActivity {
                     jsonArray = response.getJSONArray("results");
                     ArrayList<MovieObj> movies = MovieObj.fromJsonArray(jsonArray);
 
+                    if (string.equals(getString(R.string.pref_sort_highest_rated)))
+                    {
+                        Collections.sort(movies, new Comparator<MovieObj>() {
+                            @Override
+                            public int compare(MovieObj lhs, MovieObj rhs) {
+                                return lhs.getVote_average().compareTo(rhs.getVote_average());
+                            }
+                        });
+                    }
+
                     for (MovieObj movie : movies)
                         movieAdapter.add(movie);
 
@@ -100,6 +101,28 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
+    }
+
+    /**
+     * Dispatch onResume() to fragments.  Note that for better inter-operation
+     * with older versions of the platform, at the point of this call the
+     * fragments attached to the activity are <em>not</em> resumed.  This means
+     * that in some cases the previous state may still be saved, not allowing
+     * fragment transactions that modify the state.  To correctly interact
+     * with fragments in their proper state, you should instead override
+     * {@link #onResumeFragments()}.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        movieAdapter.clear();
+            try {
+                fetchMovieData();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
     }
 
     @Override

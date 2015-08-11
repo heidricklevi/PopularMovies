@@ -62,6 +62,7 @@ public class MovieObj implements Serializable {
     {
         ArrayList<MovieObj> movies = new ArrayList<>(jsonArray.length());
 
+
         JSONObject jsonItems = null;
 
         for (int i = 0; i < jsonArray.length(); i++)
