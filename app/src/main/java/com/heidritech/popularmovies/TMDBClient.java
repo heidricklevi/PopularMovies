@@ -15,6 +15,7 @@ public class TMDBClient {
     private final String API_KEY = "13ebc35e0c6a99a673ac605b5e7f3710";
     private final String image_BaseUrl = "http://image.tmdb.org/t/p/w185/";
     private final String apiBaseUrl = "http://api.themoviedb.org/3/discover/movie?";
+    /*http://api.themoviedb.org/3/movie/307081/videos?api_key=13ebc35e0c6a99a673ac605b5e7f3710*/
     private AsyncHttpClient client;
 
     public TMDBClient () {this.client = new AsyncHttpClient();}
