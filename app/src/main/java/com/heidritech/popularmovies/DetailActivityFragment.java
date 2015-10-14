@@ -2,11 +2,14 @@ package com.heidritech.popularmovies;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -29,6 +34,7 @@ public class DetailActivityFragment extends Fragment {
     private TextView title;
     private TextView userRating;
     private ImageView imageView;
+    private TextView name;
     private String imageBaseUrl = "http://image.tmdb.org/t/p/w185/";
     MovieObj intentMovie = null;
     String baseTrailer = "http://api.themoviedb.org/3/movie/";
@@ -40,6 +46,8 @@ public class DetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        getVideos();
+
 
         Intent intent = getActivity().getIntent();
         intentMovie = (MovieObj) intent.getSerializableExtra("MovieObject");
@@ -49,6 +57,7 @@ public class DetailActivityFragment extends Fragment {
         title = (TextView) rootView.findViewById(R.id.movie_title);
         userRating = (TextView) rootView.findViewById(R.id.movie_user_rating);
         imageView = (ImageView) rootView.findViewById(R.id.imageView2);
+
 
         overview.setText(intentMovie.getOverview());
         title.setText(intentMovie.getOriginal_title());
@@ -60,36 +69,77 @@ public class DetailActivityFragment extends Fragment {
         return rootView;
     }
 
-    public void onClick()
+    public String fetchVideoURL()
     {
-        String url = baseTrailer + intentMovie.getMovieID() + endTrailerURL;
+        MovieObj movieObj = null;
+        Intent intent = getActivity().getIntent();
+        movieObj = (MovieObj) intent.getSerializableExtra("MovieObject");
+        String url = baseTrailer + movieObj.getMovieID() + endTrailerURL;
+
+        return url;
+    }
+
+    public String videoName(String videoName)
+    {
+        name = (TextView) getActivity().findViewById(R.id.trailer_name);
+        name.setText(videoName);
+
+        return videoName;
+    }
+
+    public void getVideos()
+    {
+        String url = fetchVideoURL();
+
+
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new JsonHttpResponseHandler()
         {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
+                System.out.println(response);
 
                 JSONArray jsonArray = null;
+                String youtubeURL = "https://www.youtube.com/watch?v=";
 
                 try {
                     jsonArray = response.getJSONArray("results");
+                    System.out.println(jsonArray);
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        ArrayList arrayList = new ArrayList();
+                        ArrayList videoKeyArrayList = new ArrayList();
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String type = object.getString("type");
+                        if(type.equalsIgnoreCase("Trailer"))
+                        {
+                            String videoName = object.getString("name");
+                            String videoKey = object.getString("key");
+                            videoName = videoName(videoName);
+                            arrayList.add(videoName);
+                            videoKeyArrayList.add(videoKey);
+                            youtubeURL += videoKey;
+                        }
 
-                    for (int i = 0; i < jsonArray.length(); i++){
-                        JSONObject resultObj = jsonArray.getJSONObject(i);
-                        String trailerKey = resultObj.getString("key");
-                        String trailerName = resultObj.getString("name");
+                        ImageButton button = (ImageButton) getActivity().findViewById(R.id.play_trailer);
+                        final String finalYoutubeURL = youtubeURL;
+                        button.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v) {
+                                System.out.println(finalYoutubeURL);
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(finalYoutubeURL)));
+                            }
+                        });
+
+
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
-
-
-
-
         });
     }
+
 }
