@@ -1,8 +1,10 @@
 package com.heidritech.popularmovies;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -95,6 +99,7 @@ public class DetailActivityFragment extends Fragment {
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new JsonHttpResponseHandler()
         {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -122,10 +127,13 @@ public class DetailActivityFragment extends Fragment {
                             youtubeURL += videoKey;
                         }
 
+                        //LayoutInflater inflater = LayoutInflater.from(getActivity());
+                        //LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_detail, null, false);
+
+                        LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.trailer_layout);
                         ImageButton button = (ImageButton) getActivity().findViewById(R.id.play_trailer);
                         final String finalYoutubeURL = youtubeURL;
-                        button.setOnClickListener(new View.OnClickListener()
-                        {
+                        button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 System.out.println(finalYoutubeURL);
@@ -133,6 +141,13 @@ public class DetailActivityFragment extends Fragment {
                             }
                         });
 
+                        ImageButton imageButton = new ImageButton(getActivity());
+
+                        imageButton.setImageResource(R.drawable.play);
+                        imageButton.setBackground(null);
+
+                        linearLayout.setOrientation(LinearLayout.VERTICAL);
+                        linearLayout.addView(imageButton);
 
                     }
                 } catch (JSONException e) {
