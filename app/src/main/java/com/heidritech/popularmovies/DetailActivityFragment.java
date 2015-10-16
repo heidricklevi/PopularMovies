@@ -85,9 +85,6 @@ public class DetailActivityFragment extends Fragment {
 
     public String videoName(String videoName)
     {
-        name = (TextView) getActivity().findViewById(R.id.trailer_name);
-        name.setText(videoName);
-
         return videoName;
     }
 
@@ -108,6 +105,11 @@ public class DetailActivityFragment extends Fragment {
                 JSONArray jsonArray = null;
                 String youtubeURL = "https://www.youtube.com/watch?v=";
 
+                RelativeLayout relativeLayout = (RelativeLayout)getActivity().findViewById(R.id.relative_layout);
+                ImageButton imageButton = (ImageButton) getActivity().findViewById(R.id.play_trailer);
+
+
+
                 try {
                     jsonArray = response.getJSONArray("results");
                     System.out.println(jsonArray);
@@ -117,7 +119,7 @@ public class DetailActivityFragment extends Fragment {
                         ArrayList videoKeyArrayList = new ArrayList();
                         JSONObject object = jsonArray.getJSONObject(i);
                         String type = object.getString("type");
-                        if(type.equalsIgnoreCase("Trailer"))
+                        if(type.equalsIgnoreCase("Trailer") || type.equalsIgnoreCase("Teaser"))
                         {
                             String videoName = object.getString("name");
                             String videoKey = object.getString("key");
@@ -125,29 +127,34 @@ public class DetailActivityFragment extends Fragment {
                             arrayList.add(videoName);
                             videoKeyArrayList.add(videoKey);
                             youtubeURL += videoKey;
+                            name = (TextView)getActivity().findViewById(R.id.trailer_name);
+                            name.setText(videoName);
+
+
+                            final String finalYoutubeURL = youtubeURL;
+                            imageButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(finalYoutubeURL)));
+                                }
+                            });
+
+                            imageButton.setImageResource(R.drawable.play);
+                            imageButton.setBackground(null);
+
+
                         }
+                        int j = 1;
 
-                        //LayoutInflater inflater = LayoutInflater.from(getActivity());
-                        //LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_detail, null, false);
+                        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        imageButton = new ImageButton(getActivity());
+                        params1.addRule(RelativeLayout.BELOW, imageButton.getId() - 1);
 
-                        LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.trailer_layout);
-                        ImageButton button = (ImageButton) getActivity().findViewById(R.id.play_trailer);
-                        final String finalYoutubeURL = youtubeURL;
-                        button.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                System.out.println(finalYoutubeURL);
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(finalYoutubeURL)));
-                            }
-                        });
+                        imageButton.setId(j);
 
-                        ImageButton imageButton = new ImageButton(getActivity());
+                        relativeLayout.addView(imageButton, params1);
 
-                        imageButton.setImageResource(R.drawable.play);
-                        imageButton.setBackground(null);
-
-                        linearLayout.setOrientation(LinearLayout.VERTICAL);
-                        linearLayout.addView(imageButton);
+                        j++;
 
                     }
                 } catch (JSONException e) {
