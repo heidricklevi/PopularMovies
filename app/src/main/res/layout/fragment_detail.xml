@@ -106,59 +106,38 @@
                 android:layout_height="wrap_content"
                 android:text="Trailers "
                 android:textSize="20dp"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:id="@+id/trailers_textview"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:weightSum="1"
-            android:id="@+id/trailer_layout">
+            android:orientation="vertical"
+            android:padding="3dp"
+            android:id="@+id/trailer_layout"
+            android:weightSum="1">
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="10dp"
-                android:id="@+id/relative_layout">
-<!--            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/play_trailer"
-                android:src="@drawable/play"
-                android:id="@+id/relative_play"
-                style="?android:borderlessButtonStyle"/>-->
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/play"
-                style="?android:borderlessButtonStyle"
-                android:id="@+id/play_trailer" />
-
-   <!--         <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:layout_weight="0.56"
-                android:weightSum="1">
+                android:id="@+id/trailer_linear">
+            <!--<ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/play"
+                android:id="@+id/relative_play"
+                style="?android:borderlessButtonStyle" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/trailer_name"
+                android:layout_weight="1"
+                android:layout_toRightOf="@+id/relative_play"
+                android:gravity="center"/>
 
-            </LinearLayout>-->
-
-                <TextView
-                    android:layout_width="240dp"
-                    android:layout_height="61dp"
-                    android:paddingTop="30dp"
-                    android:id="@+id/trailer_name"
-                    android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/play_trailer"
-                    android:layout_toRightOf="@+id/play_trailer" />
-
-            </RelativeLayout>
-
+        </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
