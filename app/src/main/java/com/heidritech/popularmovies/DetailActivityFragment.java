@@ -24,6 +24,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,6 @@ public class DetailActivityFragment extends Fragment {
     private TextView title;
     private TextView userRating;
     private ImageView imageView;
-    private TextView name;
     private String imageBaseUrl = "http://image.tmdb.org/t/p/w185/";
     MovieObj intentMovie = null;
     String baseTrailer = "http://api.themoviedb.org/3/movie/";
@@ -89,6 +89,10 @@ public class DetailActivityFragment extends Fragment {
     public void getVideos()
     {
         String url = fetchVideoURL();
+        final ImageButton[] imageButton = new ImageButton[2];
+        //final ImageButton imageButton1 = (ImageButton) getActivity().findViewById(R.id.relative_play1);
+        final TextView[] textView = new TextView[2];
+        //final TextView textView1 = (TextView) getActivity().findViewById(R.id.trailer_name1);
 
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -111,7 +115,7 @@ public class DetailActivityFragment extends Fragment {
                         ArrayList videoKeyArrayList = new ArrayList();
                         JSONObject object = jsonArray.getJSONObject(i);
                         String type = object.getString("type");
-                        if(type.equalsIgnoreCase("Trailer") || type.equalsIgnoreCase("Teaser"))
+                        if(type.equalsIgnoreCase("Trailer") )//|| type.equalsIgnoreCase("Teaser"))
                         {
                             String videoName = object.getString("name");
                             String videoKey = object.getString("key");
@@ -119,47 +123,40 @@ public class DetailActivityFragment extends Fragment {
                             arrayList.add(videoName);
                             videoKeyArrayList.add(videoKey);
                             youtubeURL += videoKey;
-                            ImageButton imageButton; //= (ImageButton) getActivity().findViewById(R.id.relative_play);
-
-                            LinearLayout layout = (LinearLayout)getActivity().findViewById(R.id.trailer_layout);
-                            LinearLayout horizontal = new LinearLayout(getActivity());
-                            horizontal.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                            horizontal.setOrientation(LinearLayout.HORIZONTAL);
-                            layout.addView(horizontal);
-                            RelativeLayout relativeLayout = new RelativeLayout(getActivity());
-                            relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            horizontal.addView(relativeLayout);
-                            //imageButton = new ImageButton(getActivity());
-                            imageButton = new ImageButton(getActivity());
-                            name = new TextView(getActivity());
-                            imageButton.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                            imageButton.setImageResource(R.drawable.play1);
-                            imageButton.setBackgroundResource(0);
-                            imageButton.setId(i);
-                            /*RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);*/
-                            horizontal.addView(imageButton);
-                            name.setText(videoName);
-                            name.setGravity(Gravity.BOTTOM);/*
-                            params.addRule(RelativeLayout.ALIGN_RIGHT, imageButton.getId());*/
-                            /*name.setLayoutParams(params);*/
-
-                            horizontal.addView(name);
-
                             final String finalYoutubeURL = youtubeURL;
-                            imageButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(finalYoutubeURL)));
+                            if (textView[0] == null)
+                            {
 
-                                }
-                            });
+                                textView[0] = (TextView) getActivity().findViewById(R.id.trailer_name);
+                                imageButton[0] = (ImageButton) getActivity().findViewById(R.id.relative_play);
 
+                                System.out.println(videoName);
+                                textView[0].setText(videoName);
 
+                                imageButton[0].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(finalYoutubeURL)));
 
+                                    }
+                                });
 
+                            }
 
+                            if (i > 0 && textView[0] != null)
+                            {
+                                textView[1] = (TextView) getActivity().findViewById(R.id.trailer_name1);
+                                imageButton[1] = (ImageButton) getActivity().findViewById(R.id.relative_play1);
 
+                                textView[1].setText(videoName);
+                                imageButton[1].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(finalYoutubeURL)));
 
+                                    }
+                                });
+                            }
 
 
                         }
