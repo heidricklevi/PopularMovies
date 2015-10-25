@@ -95,6 +95,7 @@ public class DetailActivityFragment extends Fragment {
         //final TextView textView1 = (TextView) getActivity().findViewById(R.id.trailer_name1);
 
 
+
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new JsonHttpResponseHandler()
         {
@@ -105,28 +106,26 @@ public class DetailActivityFragment extends Fragment {
                 System.out.println(response);
 
                 JSONArray jsonArray = null;
-                String youtubeURL = "https://www.youtube.com/watch?v=";
                 try {
                     jsonArray = response.getJSONArray("results");
                     System.out.println(jsonArray);
                     for (int i = 0; i < jsonArray.length(); i++)
                     {
-                        ArrayList arrayList = new ArrayList();
-                        ArrayList videoKeyArrayList = new ArrayList();
+                        final String[] youtubeUrl = new String[jsonArray.length()];
                         JSONObject object = jsonArray.getJSONObject(i);
                         String type = object.getString("type");
                         if(type.equalsIgnoreCase("Trailer") )//|| type.equalsIgnoreCase("Teaser"))
                         {
+                            String youtubeURL = "https://www.youtube.com/watch?v=";
                             String videoName = object.getString("name");
                             String videoKey = object.getString("key");
                             videoName = videoName(videoName);
-                            arrayList.add(videoName);
-                            videoKeyArrayList.add(videoKey);
                             youtubeURL += videoKey;
-                            final String finalYoutubeURL = youtubeURL;
-                            if (textView[0] == null)
-                            {
 
+
+                            if (textView[0] == null && imageButton[0] == null)
+                            {
+                                youtubeUrl[0] = youtubeURL;
                                 textView[0] = (TextView) getActivity().findViewById(R.id.trailer_name);
                                 imageButton[0] = (ImageButton) getActivity().findViewById(R.id.relative_play);
 
@@ -136,15 +135,16 @@ public class DetailActivityFragment extends Fragment {
                                 imageButton[0].setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(finalYoutubeURL)));
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl[0])));
 
                                     }
                                 });
 
                             }
 
-                            if (i > 0 && textView[0] != null)
+                            if (i > 0 && textView[0] != null && imageButton[0] != null)
                             {
+                                youtubeUrl[1] = youtubeURL;
                                 textView[1] = (TextView) getActivity().findViewById(R.id.trailer_name1);
                                 imageButton[1] = (ImageButton) getActivity().findViewById(R.id.relative_play1);
 
@@ -152,7 +152,7 @@ public class DetailActivityFragment extends Fragment {
                                 imageButton[1].setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(finalYoutubeURL)));
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl[1])));
 
                                     }
                                 });
