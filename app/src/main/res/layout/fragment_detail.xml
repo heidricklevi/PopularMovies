@@ -105,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Trailers "
-                android:textSize="20dp"
+                android:textSize="12pt"
                 android:padding="10dp"
                 android:id="@+id/trailers_textview"/>
         </LinearLayout>
@@ -151,7 +151,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/linearlayout">
 
 
 
@@ -171,6 +172,50 @@
 
 
             </LinearLayout>
+
+            <View
+                android:id="@+id/hline3"
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="#545889" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reviews"
+                android:textSize="12pt"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/author"
+                    android:text="No Reviews at this time."
+                    android:textSize="8pt"
+                    android:textColor="@color/accent_material_light"/>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/content"
+                android:textSize="10pt"
+                android:text="content"
+                android:paddingLeft="15dp"/>
+
+            <View
+                android:id="@+id/hline4"
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="#545889" />
+
         </LinearLayout>
 
     </LinearLayout>

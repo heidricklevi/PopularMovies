@@ -6,14 +6,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -24,9 +22,6 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -39,8 +34,9 @@ public class DetailActivityFragment extends Fragment {
     private ImageView imageView;
     private String imageBaseUrl = "http://image.tmdb.org/t/p/w185/";
     MovieObj intentMovie = null;
-    String baseTrailer = "http://api.themoviedb.org/3/movie/";
+    String baseApi = "http://api.themoviedb.org/3/movie/";
     String endTrailerURL = "/videos?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
+    String endReviewsURL = "/reviews?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
     public DetailActivityFragment() {
     }
 
@@ -49,6 +45,7 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         getVideos();
+        fetchReviews();
 
 
         Intent intent = getActivity().getIntent();
@@ -76,7 +73,17 @@ public class DetailActivityFragment extends Fragment {
         MovieObj movieObj = null;
         Intent intent = getActivity().getIntent();
         movieObj = (MovieObj) intent.getSerializableExtra("MovieObject");
-        String url = baseTrailer + movieObj.getMovieID() + endTrailerURL;
+        String url = baseApi + movieObj.getMovieID() + endTrailerURL;
+
+        return url;
+    }
+
+    public String fetchReviewsURL()
+    {
+        MovieObj movieObj = null;
+        Intent intent = getActivity().getIntent();
+        movieObj = (MovieObj) intent.getSerializableExtra("MovieObject");
+        String url = baseApi + movieObj.getMovieID() + endReviewsURL;
 
         return url;
     }
@@ -158,6 +165,17 @@ public class DetailActivityFragment extends Fragment {
                                 });
                             }
 
+                            if(textView[0]!= null && textView[1] != null || i > 0 && textView[0].getText() == textView[1].getText() || jsonArray.length() == 1)
+                            {
+                                LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
+                                View view = getActivity().findViewById(R.id.hline3);
+
+
+                                layout.removeView(imageButton[1]);
+                                layout.removeView(textView[1]);
+                                layout.removeView(view);
+                            }
+
 
                         }
 
@@ -173,6 +191,42 @@ public class DetailActivityFragment extends Fragment {
         });
     }
 
+    public void fetchReviews()
+    {
+        String url = fetchReviewsURL();
 
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(url, new JsonHttpResponseHandler()
+        {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+
+                JSONArray jsonArray = null;
+
+                try {
+                    jsonArray = response.getJSONArray("results");
+                    System.out.println(jsonArray);
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        TextView authorTextview = (TextView) getActivity().findViewById(R.id.author);
+                        TextView contentTextview = (TextView) getActivity().findViewById(R.id.content);
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String content = object.getString("content");
+                        String author = object.getString("author");
+                        System.out.println(content);
+
+                        if (object != null) {
+                            authorTextview.setText(author);
+                            contentTextview.setText(content);
+                        }
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
 }
