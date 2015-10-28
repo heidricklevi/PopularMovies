@@ -202,13 +202,15 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/content"
-                android:textSize="10pt"
-                android:text="content"
-                android:paddingLeft="15dp"/>
+            <include
+                android:id="@+id/review1"
+                layout="@layout/content_item">
+            </include>
+
+            <include
+                android:id="@+id/review2"
+                layout="@layout/content_item">
+            </include>
 
             <View
                 android:id="@+id/hline4"

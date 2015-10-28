@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
@@ -118,6 +119,8 @@ public class DetailActivityFragment extends Fragment {
                     System.out.println(jsonArray);
                     for (int i = 0; i < jsonArray.length(); i++)
                     {
+                        textView[1] = (TextView) getActivity().findViewById(R.id.trailer_name1);
+                        imageButton[1] = (ImageButton) getActivity().findViewById(R.id.relative_play1);
                         final String[] youtubeUrl = new String[jsonArray.length()];
                         JSONObject object = jsonArray.getJSONObject(i);
                         String type = object.getString("type");
@@ -128,7 +131,7 @@ public class DetailActivityFragment extends Fragment {
                             String videoKey = object.getString("key");
                             videoName = videoName(videoName);
                             youtubeURL += videoKey;
-
+                            int length = jsonArray.length();
 
                             if (textView[0] == null && imageButton[0] == null)
                             {
@@ -149,7 +152,7 @@ public class DetailActivityFragment extends Fragment {
 
                             }
 
-                            if (i > 0 && textView[0] != null && imageButton[0] != null)
+                            if (jsonArray.length() > 1 && textView[0] != null && imageButton[0] != null)
                             {
                                 youtubeUrl[1] = youtubeURL;
                                 textView[1] = (TextView) getActivity().findViewById(R.id.trailer_name1);
@@ -164,18 +167,28 @@ public class DetailActivityFragment extends Fragment {
                                     }
                                 });
                             }
+                            if( i == jsonArray.length() && textView[0].getText() == textView[1].getText())
+                                {
+                                    LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
+                                    View view = getActivity().findViewById(R.id.hline3);
 
-                            if(textView[0]!= null && textView[1] != null || i > 0 && textView[0].getText() == textView[1].getText() || jsonArray.length() == 1)
-                            {
-                                LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
-                                View view = getActivity().findViewById(R.id.hline3);
+
+                                    layout.removeView(imageButton[1]);
+                                    layout.removeView(textView[1]);
+                                    layout.removeView(view);
+                                }
+                            else if (jsonArray.length() == 1)
+                                    {
+                                        LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
+                                        View view = getActivity().findViewById(R.id.hline3);
 
 
-                                layout.removeView(imageButton[1]);
-                                layout.removeView(textView[1]);
-                                layout.removeView(view);
-                            }
+                                        layout.removeView(imageButton[1]);
+                                        layout.removeView(textView[1]);
+                                        layout.removeView(view);
+                                    }
 
+                            System.out.println("This is i: " + i);
 
                         }
 
@@ -209,16 +222,20 @@ public class DetailActivityFragment extends Fragment {
                     System.out.println(jsonArray);
                     for (int i = 0; i < jsonArray.length(); i++)
                     {
-                        TextView authorTextview = (TextView) getActivity().findViewById(R.id.author);
-                        TextView contentTextview = (TextView) getActivity().findViewById(R.id.content);
+                        /*TextView authorTextview = (TextView) getActivity().findViewById(R.id.author);
+                        TextView contentTextview = (TextView) getActivity().findViewById(R.id.content);*/
+                        ExpandableTextView textView = (ExpandableTextView) getActivity().findViewById(R.id.review1).findViewById(R.id.expand_text_view);
+                        TextView textView1 = (TextView) getActivity().findViewById(R.id.review1).findViewById(R.id.title);
                         JSONObject object = jsonArray.getJSONObject(i);
                         String content = object.getString("content");
                         String author = object.getString("author");
                         System.out.println(content);
 
-                        if (object != null) {
+                        if (object != null) {/*
                             authorTextview.setText(author);
-                            contentTextview.setText(content);
+                            contentTextview.setText(content);*/
+                            textView.setText(content);
+                            textView1.setText(author);
                         }
 
                     }
