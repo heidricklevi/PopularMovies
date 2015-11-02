@@ -112,7 +112,7 @@ public class DetailActivityFragment extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 System.out.println(response);
-
+                Boolean isSet = false;
                 JSONArray jsonArray = null;
                 try {
                     jsonArray = response.getJSONArray("results");
@@ -131,7 +131,7 @@ public class DetailActivityFragment extends Fragment {
                             String videoKey = object.getString("key");
                             videoName = videoName(videoName);
                             youtubeURL += videoKey;
-                            int length = jsonArray.length();
+
 
                             if (textView[0] == null && imageButton[0] == null)
                             {
@@ -150,9 +150,11 @@ public class DetailActivityFragment extends Fragment {
                                     }
                                 });
 
+                                isSet = true;
+
                             }
 
-                            if (jsonArray.length() > 1 && textView[0] != null && imageButton[0] != null)
+                            if (i > 0 && textView[0] != null && imageButton[0] != null)
                             {
                                 youtubeUrl[1] = youtubeURL;
                                 textView[1] = (TextView) getActivity().findViewById(R.id.trailer_name1);
@@ -166,8 +168,12 @@ public class DetailActivityFragment extends Fragment {
 
                                     }
                                 });
+
+                                if (textView[0].getText() == textView[1].getText()){
+                                    isSet = false;
+                                }
                             }
-                            if( i == jsonArray.length() && textView[0].getText() == textView[1].getText())
+                            if(!isSet)
                                 {
                                     LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
                                     View view = getActivity().findViewById(R.id.hline3);

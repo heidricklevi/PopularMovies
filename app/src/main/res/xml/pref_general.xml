@@ -9,4 +9,12 @@
         android:entryValues="@array/temp_item_values">
     </ListPreference>
 
+    <CheckBoxPreference
+        android:title="Now Playing"
+        android:key="@string/pref_now_playing_key"
+        android:summaryOn="@string/pref_enable_now_playing"
+        android:summaryOff="@string/pref_now_playing_false"
+        android:defaultValue="@string/pref_default_nowplaying">
+    </CheckBoxPreference>
+
 </PreferenceScreen>

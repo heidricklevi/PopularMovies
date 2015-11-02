@@ -5,7 +5,11 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
     <string name="pref_sort_key">sort_by</string>
-    <string name="pref_sort_pop">popularity.asc</string>
-    <string name="pref_sort_highest_rated">vote_average.desc</string>
+    <string name="pref_sort_pop">Popularity</string>
+    <string name="pref_sort_highest_rated">Descending</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="pref_now_playing_key">display_nowplaying</string>
+    <string name="pref_now_playing_false">False</string>
+    <string name="pref_enable_now_playing">True</string>
+    <string name="pref_default_nowplaying">True</string>
 </resources>

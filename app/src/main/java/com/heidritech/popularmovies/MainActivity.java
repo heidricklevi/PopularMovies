@@ -62,6 +62,7 @@ public class MainActivity extends ActionBarActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         final String string = sharedPreferences.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_pop));
 
+
         client = new TMDBClient();
 
         client.getMovies(new JsonHttpResponseHandler()

@@ -1,6 +1,9 @@
 package com.heidritech.popularmovies;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -17,7 +20,6 @@ public class TMDBClient {
     private final String apiBaseUrl = "http://api.themoviedb.org/3/discover/movie?";
     /*http://api.themoviedb.org/3/movie/307081/videos?api_key=13ebc35e0c6a99a673ac605b5e7f3710*/
     private AsyncHttpClient client;
-
     public TMDBClient () {this.client = new AsyncHttpClient();}
 
     public URL buildURL() throws MalformedURLException {
@@ -29,6 +31,15 @@ public class TMDBClient {
         URL url = new URL(builtUri.toString());
 
         return url;
+    }
+
+    public void getNowPlaying(Context context)
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String now_playing = sharedPreferences.getString(String.valueOf(R.string.pref_now_playing_key), String.valueOf((R.string.pref_default_nowplaying)));
+
+
+
     }
 
     public void getMovies(JsonHttpResponseHandler handler) throws MalformedURLException {
