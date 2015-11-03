@@ -18,6 +18,7 @@ public class TMDBClient {
     private final String API_KEY = "13ebc35e0c6a99a673ac605b5e7f3710";
     private final String image_BaseUrl = "http://image.tmdb.org/t/p/w185/";
     private final String apiBaseUrl = "http://api.themoviedb.org/3/discover/movie?";
+
     /*http://api.themoviedb.org/3/movie/307081/videos?api_key=13ebc35e0c6a99a673ac605b5e7f3710*/
     private AsyncHttpClient client;
     public TMDBClient () {this.client = new AsyncHttpClient();}
@@ -33,18 +34,19 @@ public class TMDBClient {
         return url;
     }
 
-    public void getNowPlaying(Context context)
+   /* public String getNowPlaying(Context context)
     {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String now_playing = sharedPreferences.getString(String.valueOf(R.string.pref_now_playing_key), String.valueOf((R.string.pref_default_nowplaying)));
+        String nowPlaying = sharedPreferences.getString(String.valueOf(R.string.pref_now_playing_key), String.valueOf((R.string.pref_default_nowplaying)));
 
-
-
-    }
+        return nowPlaying;
+    }*/
 
     public void getMovies(JsonHttpResponseHandler handler) throws MalformedURLException {
         String url = String.valueOf(buildURL());
         client.get(url,handler);
     }
+
+
 
 }
