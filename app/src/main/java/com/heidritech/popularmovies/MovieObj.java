@@ -18,6 +18,7 @@ public class MovieObj implements Serializable {
     private String vote_average;
     private String release_date;
     private String movieID;
+    private String backdrop_path;
 
     public String getPoster_path() {
         return poster_path;
@@ -41,6 +42,8 @@ public class MovieObj implements Serializable {
 
     public String getMovieID() {return movieID;}
 
+    public String getBackdrop_path() {return backdrop_path;}
+
     public MovieObj (){}
 
 
@@ -57,6 +60,7 @@ public class MovieObj implements Serializable {
         movie.release_date = jsonObject.getString("release_date");
         movie.vote_average = jsonObject.getString("vote_average");
         movie.movieID = jsonObject.getString("id");
+        movie.backdrop_path = jsonObject.getString("backdrop_path");
 
         return movie;
 

@@ -9,7 +9,7 @@
     <string name="pref_sort_highest_rated">Descending</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="pref_now_playing_key">display_nowplaying</string>
-    <string name="pref_now_playing_false">disable_nowplaying</string>
-    <string name="pref_enable_now_playing">enable_nowplaying</string>
+    <string name="pref_now_playing_false">Not displaying Now Playing</string>
+    <string name="pref_enable_now_playing">Displaying Now Playing</string>
     <string name="pref_default_nowplaying">enable_nowplaying</string>
 </resources>

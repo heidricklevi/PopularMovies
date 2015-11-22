@@ -1,20 +1,61 @@
 package com.heidritech.popularmovies;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.loopj.android.http.AsyncHttpClient;
+import android.view.View;
+import android.widget.ImageButton;
 
 public class DetailActivity extends AppCompatActivity {
+
+    public ImageButton imageButton;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        imageButton = (ImageButton) findViewById(R.id.favorites_button);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                imageButton.setSelected(true);
+
+                if(imageButton.isPressed() && imageButton.isSelected())
+                {
+                    imageButton.setSelected(false);
+                }
+
+
+            }
+        });
+
+        LoadPreferences();
+
+    }
+    private void SavePreferences(){
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("state", imageButton.isSelected());
+        editor.commit();   // I missed to save the data to preference here,.
     }
 
+    private void LoadPreferences(){
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        Boolean  state = sharedPreferences.getBoolean("state", false);
+        imageButton.setSelected(state);
+    }
+
+    @Override
+    public void onBackPressed() {
+        SavePreferences();
+        super.onBackPressed();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

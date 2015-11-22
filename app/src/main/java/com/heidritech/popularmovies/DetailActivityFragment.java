@@ -33,7 +33,7 @@ public class DetailActivityFragment extends Fragment {
     private TextView title;
     private TextView userRating;
     private ImageView imageView;
-    private String imageBaseUrl = "http://image.tmdb.org/t/p/w185/";
+    private String imageBaseUrl = "http://image.tmdb.org/t/p/w780/";
     MovieObj intentMovie = null;
     String baseApi = "http://api.themoviedb.org/3/movie/";
     String endTrailerURL = "/videos?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
@@ -45,6 +45,7 @@ public class DetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
         getVideos();
         fetchReviews();
 
@@ -63,11 +64,12 @@ public class DetailActivityFragment extends Fragment {
         title.setText(intentMovie.getOriginal_title());
         releaseDate.setText(intentMovie.getRelease_date());
         userRating.setText(intentMovie.getVote_average());
-        Picasso.with(getActivity()).load(imageBaseUrl + intentMovie.getPoster_path()).into(imageView);
+        Picasso.with(getActivity()).load(imageBaseUrl + intentMovie.getBackdrop_path()).into(imageView);
 
 
         return rootView;
     }
+
 
     public String fetchVideoURL()
     {
@@ -117,6 +119,10 @@ public class DetailActivityFragment extends Fragment {
                 try {
                     jsonArray = response.getJSONArray("results");
                     System.out.println(jsonArray);
+                    if (jsonArray == null)
+                    {
+                        return;
+                    }
                     for (int i = 0; i < jsonArray.length(); i++)
                     {
                         textView[1] = (TextView) getActivity().findViewById(R.id.trailer_name1);
@@ -176,23 +182,39 @@ public class DetailActivityFragment extends Fragment {
                             if(!isSet)
                                 {
                                     LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
-                                    View view = getActivity().findViewById(R.id.hline3);
+                                    /*View view = getActivity().findViewById(R.id.hline3);*/
 
 
                                     layout.removeView(imageButton[1]);
                                     layout.removeView(textView[1]);
-                                    layout.removeView(view);
+                                    /*layout.removeView(view);*/
                                 }
                             else if (jsonArray.length() == 1)
                                     {
                                         LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
-                                        View view = getActivity().findViewById(R.id.hline3);
+                                        /*View view = getActivity().findViewById(R.id.hline3);*/
 
 
                                         layout.removeView(imageButton[1]);
                                         layout.removeView(textView[1]);
-                                        layout.removeView(view);
+                                        /*layout.removeView(view);*/
                                     }
+
+                            else if (jsonArray == null)
+                            {
+                                LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
+                                LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.trailer_layout);
+                                /*View view = getActivity().findViewById(R.id.hline3);*/
+                                View view1 = getActivity().findViewById(R.id.hline2);
+
+
+                                linearLayout.removeView(imageButton[0]);
+                                linearLayout.removeView(textView[0]);
+                                linearLayout.removeView(view1);
+                                layout.removeView(imageButton[1]);
+                                layout.removeView(textView[1]);
+                                /*layout.removeView(view);*/
+                            }
 
                             System.out.println("This is i: " + i);
 
@@ -215,8 +237,7 @@ public class DetailActivityFragment extends Fragment {
         String url = fetchReviewsURL();
 
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get(url, new JsonHttpResponseHandler()
-        {
+        client.get(url, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -226,8 +247,7 @@ public class DetailActivityFragment extends Fragment {
                 try {
                     jsonArray = response.getJSONArray("results");
                     System.out.println(jsonArray);
-                    for (int i = 0; i < jsonArray.length(); i++)
-                    {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         /*TextView authorTextview = (TextView) getActivity().findViewById(R.id.author);
                         TextView contentTextview = (TextView) getActivity().findViewById(R.id.content);*/
                         ExpandableTextView textView = (ExpandableTextView) getActivity().findViewById(R.id.review1).findViewById(R.id.expand_text_view);
@@ -251,5 +271,8 @@ public class DetailActivityFragment extends Fragment {
             }
         });
     }
+
+
+
 
 }
