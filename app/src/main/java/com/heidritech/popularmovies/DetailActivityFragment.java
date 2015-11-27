@@ -38,6 +38,7 @@ public class DetailActivityFragment extends Fragment {
     String baseApi = "http://api.themoviedb.org/3/movie/";
     String endTrailerURL = "/videos?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
     String endReviewsURL = "/reviews?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
+    MovieDBHelper database = new MovieDBHelper(getContext(), MovieDBHelper.DB_NAME, null, MovieDBHelper.DB_VERSION);
     public DetailActivityFragment() {
     }
 
@@ -52,6 +53,7 @@ public class DetailActivityFragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
         intentMovie = (MovieObj) intent.getSerializableExtra("MovieObject");
+
 
         overview = (TextView) rootView.findViewById(R.id.movie_overview);
         releaseDate = (TextView) rootView.findViewById(R.id.movie_release_date);
@@ -77,7 +79,6 @@ public class DetailActivityFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         movieObj = (MovieObj) intent.getSerializableExtra("MovieObject");
         String url = baseApi + movieObj.getMovieID() + endTrailerURL;
-
         return url;
     }
 

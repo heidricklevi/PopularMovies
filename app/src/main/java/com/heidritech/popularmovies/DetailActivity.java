@@ -1,6 +1,5 @@
 package com.heidritech.popularmovies;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -13,7 +12,6 @@ public class DetailActivity extends AppCompatActivity {
     public ImageButton imageButton;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,15 +21,7 @@ public class DetailActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 imageButton.setSelected(true);
-
-                if(imageButton.isPressed() && imageButton.isSelected())
-                {
-                    imageButton.setSelected(false);
-                }
-
-
             }
         });
 
@@ -39,16 +29,16 @@ public class DetailActivity extends AppCompatActivity {
 
     }
     private void SavePreferences(){
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        /*SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("state", imageButton.isSelected());
-        editor.commit();   // I missed to save the data to preference here,.
+        editor.commit();*/   // I missed to save the data to preference here,.
     }
 
     private void LoadPreferences(){
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+       /* SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         Boolean  state = sharedPreferences.getBoolean("state", false);
-        imageButton.setSelected(state);
+        imageButton.setSelected(state);*/
     }
 
     @Override
