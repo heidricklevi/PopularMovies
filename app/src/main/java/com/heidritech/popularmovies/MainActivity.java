@@ -2,6 +2,8 @@ package com.heidritech.popularmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -27,6 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 
+
 public class MainActivity extends ActionBarActivity {
 
     private final String now_playing =  "http://api.themoviedb.org/3/movie/now_playing?";
@@ -34,7 +37,10 @@ public class MainActivity extends ActionBarActivity {
     private GridView gridView;
     private ImageAdapter movieAdapter;
     private TMDBClient client;
-    private int resource;
+    private String[] columns = {MovieContract.columns.MOVIE_ID, MovieContract.columns.COL_BACKDROP,MovieContract.columns.COL_TITLE, MovieContract.columns.COL_POSTER, MovieContract.columns.COL_RELEASE,
+            MovieContract.columns.COL_VOTE, MovieContract.columns.COL_OVERVIEW};
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +49,13 @@ public class MainActivity extends ActionBarActivity {
         ArrayList<MovieObj> aMovies = new ArrayList<>();
         movieAdapter = new ImageAdapter(this,aMovies);
         gridView.setAdapter(movieAdapter);
-        try {
-            fetchMovieData();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+            try {
+                fetchMovieData();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -55,8 +63,10 @@ public class MainActivity extends ActionBarActivity {
                 MovieObj iMovie = movieAdapter.getItem(position);
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class).putExtra("MovieObject", iMovie);
                 startActivity(intent);
+
             }
         });
+
 
 
     }
@@ -72,12 +82,51 @@ public class MainActivity extends ActionBarActivity {
         return url;
     }
 
+    public ArrayList<MovieObj> getMarkedFavs()
+    {
+        MovieDBHelper dbHelper = new MovieDBHelper(getApplicationContext());
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        ArrayList<MovieObj> movieObjs = new ArrayList<>();
+        Cursor cursor = sqLiteDatabase.query(MovieContract.columns.TABLE_NAME, columns, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            MovieObj obj = setMovie(cursor);
+            movieObjs.add(obj);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return movieObjs;
+
+    }
+
+    public MovieObj setMovie(Cursor cursor)
+    {
+        /*{MovieContract.columns.MOVIE_ID, MovieContract.columns.COL_BACKDROP, MovieContract.columns.COL_TITLE, MovieContract.columns.COL_POSTER, MovieContract.columns.COL_RELEASE,
+            MovieContract.columns.COL_VOTE};*/
+        MovieObj obj = new MovieObj();
+
+        obj.setMovieID(cursor.getString(0));
+        obj.setBackdrop_path(cursor.getString(1));
+        obj.setOriginal_title(cursor.getString(2));
+        obj.setPoster_path(cursor.getString(3));
+        obj.setRelease_date(cursor.getString(4));
+        obj.setVote_average(cursor.getString(5));
+        obj.setOverview(cursor.getString(6));
+
+        return obj;
+    }
+
 
 
     private void fetchMovieData() throws MalformedURLException {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         final String string = sharedPreferences.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_pop));
         Boolean nowPlaying = sharedPreferences.getBoolean(getString(R.string.pref_now_playing_key), true);
+        final Boolean favs = sharedPreferences.getBoolean(getString(R.string.pref_fav_key), true);
 
         client = new TMDBClient();
         if (nowPlaying)
@@ -96,6 +145,8 @@ public class MainActivity extends ActionBarActivity {
                     try {
                         jsonArray = response.getJSONArray("results");
                         ArrayList<MovieObj> movieObjs = MovieObj.fromJsonArray(jsonArray);
+                        if (favs)
+                            movieObjs = getMarkedFavs();
 
                         for (MovieObj movieObj : movieObjs)
                             movieAdapter.add(movieObj);

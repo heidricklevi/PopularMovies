@@ -1,7 +1,10 @@
 package com.heidritech.popularmovies;
 
 import android.annotation.TargetApi;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -33,25 +37,28 @@ public class DetailActivityFragment extends Fragment {
     private TextView title;
     private TextView userRating;
     private ImageView imageView;
+    private ImageButton favoriteButton;
     private String imageBaseUrl = "http://image.tmdb.org/t/p/w780/";
     MovieObj intentMovie = null;
     String baseApi = "http://api.themoviedb.org/3/movie/";
     String endTrailerURL = "/videos?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
     String endReviewsURL = "/reviews?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
-    MovieDBHelper database = new MovieDBHelper(getContext(), MovieDBHelper.DB_NAME, null, MovieDBHelper.DB_VERSION);
     public DetailActivityFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        final MovieDBHelper openHelper = new MovieDBHelper(getActivity());
+        final SQLiteDatabase database = openHelper.getWritableDatabase();
 
         getVideos();
         fetchReviews();
 
 
-        Intent intent = getActivity().getIntent();
+        final Intent intent = getActivity().getIntent();
         intentMovie = (MovieObj) intent.getSerializableExtra("MovieObject");
 
 
@@ -60,6 +67,7 @@ public class DetailActivityFragment extends Fragment {
         title = (TextView) rootView.findViewById(R.id.movie_title);
         userRating = (TextView) rootView.findViewById(R.id.movie_user_rating);
         imageView = (ImageView) rootView.findViewById(R.id.imageView2);
+        favoriteButton = (ImageButton) rootView.findViewById(R.id.favorites_button);
 
 
         overview.setText(intentMovie.getOverview());
@@ -67,6 +75,49 @@ public class DetailActivityFragment extends Fragment {
         releaseDate.setText(intentMovie.getRelease_date());
         userRating.setText(intentMovie.getVote_average());
         Picasso.with(getActivity()).load(imageBaseUrl + intentMovie.getBackdrop_path()).into(imageView);
+
+
+        if (openHelper.isFavorite(intentMovie))
+        {
+            favoriteButton.setImageResource(R.drawable.star);
+        }
+        else
+        {
+            favoriteButton.setImageResource(R.drawable.star_outline);
+        }
+
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!openHelper.isFavorite(intentMovie)) {
+                    ContentValues contentValues = new ContentValues();
+
+                    contentValues.put(MovieContract.columns.MOVIE_ID, intentMovie.getMovieID());
+                    contentValues.put(MovieContract.columns.COL_TITLE, intentMovie.getOriginal_title());
+                    contentValues.put(MovieContract.columns.COL_BACKDROP, intentMovie.getBackdrop_path());
+                    contentValues.put(MovieContract.columns.COL_POSTER, intentMovie.getPoster_path());
+                    contentValues.put(MovieContract.columns.COL_RELEASE, intentMovie.getRelease_date());
+                    contentValues.put(MovieContract.columns.COL_VOTE, intentMovie.getVote_average());
+                    contentValues.put(MovieContract.columns.COL_OVERVIEW, intentMovie.getOverview());
+
+                    database.insert(MovieContract.columns.TABLE_NAME, null, contentValues);
+                    favoriteButton.setImageResource(R.drawable.star);
+
+                    Toast.makeText(getContext(), "Successfully Added " + intentMovie.getOriginal_title() + " To Favorites! ", Toast.LENGTH_SHORT).show();
+                }
+
+                else if (openHelper.isFavorite(intentMovie))
+                {
+                    favoriteButton.setImageResource(R.drawable.star_outline);
+                    int deleteRows = database.delete(MovieContract.columns.TABLE_NAME, MovieContract.columns.MOVIE_ID + "= ?", new String[]{intentMovie.getMovieID()});
+
+                        Context context = getContext();
+                        Toast.makeText(context, "Successfully Removed " + intentMovie.getOriginal_title() + " From Favorites!", Toast.LENGTH_SHORT).show();
+
+                    System.out.println("Deleted " + deleteRows + " records.");
+                }
+            }
+        });
 
 
         return rootView;

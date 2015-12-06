@@ -1,11 +1,9 @@
+package com.heidritech.popularmovies;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.heidritech.popularmovies.MovieContract;
-import com.heidritech.popularmovies.MovieDBHelper;
-import com.heidritech.popularmovies.MovieObj;
 
 import java.util.ArrayList;
 
