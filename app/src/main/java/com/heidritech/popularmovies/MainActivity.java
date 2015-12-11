@@ -1,153 +1,52 @@
 package com.heidritech.popularmovies;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
-    private final String now_playing =  "http://api.themoviedb.org/3/movie/now_playing?";
-    private final String API_KEY = "13ebc35e0c6a99a673ac605b5e7f3710";
-    private GridView gridView;
-    private ImageAdapter movieAdapter;
-    private TMDBClient client;
+    SectionsPagerAdapter sectionsPagerAdapter;
+    ViewPager viewPager;
 
 
-    @Override
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        gridView = (GridView) findViewById(R.id.gridview );
-        ArrayList<MovieObj> aMovies = new ArrayList<>();
-        movieAdapter = new ImageAdapter(this,aMovies);
-        gridView.setAdapter(movieAdapter);
-            try {
-                fetchMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+        setContentView(R.layout.viewpager);
 
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                MovieObj iMovie = movieAdapter.getItem(position);
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class).putExtra("MovieObject", iMovie);
-                startActivity(intent);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(sectionsPagerAdapter);
 
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                actionBar.setSelectedNavigationItem(position);
             }
         });
 
 
-
-    }
-
-    public URL getNowPlayingUrl() throws MalformedURLException {
-
-        Uri.Builder builder = Uri.parse(now_playing).buildUpon()
-                .appendQueryParameter("api_key", API_KEY);
-        builder.build();
-
-        URL url = new URL(builder.toString());
-
-        return url;
-    }
-
-    private void fetchMovieData() throws MalformedURLException {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final String string = sharedPreferences.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_pop));
-        Boolean nowPlaying = sharedPreferences.getBoolean(getString(R.string.pref_now_playing_key), true);
-
-        client = new TMDBClient();
-        if (nowPlaying)
-        {
-            String url = String.valueOf(getNowPlayingUrl());
-            AsyncHttpClient client = new AsyncHttpClient();
-
-            client.get(url, new JsonHttpResponseHandler()
-            {
-                JSONArray jsonArray = null;
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-
-                    try {
-                        jsonArray = response.getJSONArray("results");
-                        ArrayList<MovieObj> movieObjs = MovieObj.fromJsonArray(jsonArray);
-                        for (MovieObj movieObj : movieObjs)
-                            movieAdapter.add(movieObj);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
+        for (int i = 0; i < sectionsPagerAdapter.getCount(); i++) {
+            // Create a tab with text corresponding to the page title defined by
+            // the adapter. Also specify this Activity object, which implements
+            // the TabListener interface, as the callback (listener) for when
+            // this tab is selected.
+            actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
         }
 
-        else
-        {
-            client.getMovies(new JsonHttpResponseHandler() {
-                /**
-                 * Returns when request succeeds
-                 *
-                 * @param statusCode http response status line
-                 * @param headers    response headers if any
-                 * @param response   parsed response if any
-                 */
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    JSONArray jsonArray = null;
-
-                    try {
-                        jsonArray = response.getJSONArray("results");
-                        ArrayList<MovieObj> movies = MovieObj.fromJsonArray(jsonArray);
-
-                        if (string.equals(getString(R.string.pref_sort_highest_rated))) {
-                            Collections.sort(movies, new Comparator<MovieObj>() {
-                                @Override
-                                public int compare(MovieObj lhs, MovieObj rhs) {
-                                    return lhs.getVote_average().compareTo(rhs.getVote_average());
-                                }
-                            });
-                        }
-
-                        for (MovieObj movie : movies)
-                            movieAdapter.add(movie);
-
-                        movieAdapter.notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
     }
 
     /**
@@ -159,18 +58,7 @@ public class MainActivity extends ActionBarActivity {
      * with fragments in their proper state, you should instead override
      * {@link #onResumeFragments()}.
      */
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        movieAdapter.clear();
-            try {
-                fetchMovieData();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -198,4 +86,20 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
 }
+

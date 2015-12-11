@@ -17,12 +17,5 @@
         android:defaultValue="@string/pref_default_nowplaying">
     </CheckBoxPreference>
 
-    <CheckBoxPreference
-        android:title="Favorites!"
-        android:key="@string/pref_fav_key"
-        android:summaryOn="@string/pref_yes_favs"
-        android:summaryOff="@string/pref_no_favs"
-        android:defaultValue="@string/pref_default_yes_favs">
-    </CheckBoxPreference>
 
 </PreferenceScreen>
