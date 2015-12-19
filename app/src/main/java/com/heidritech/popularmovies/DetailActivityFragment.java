@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,13 +31,15 @@ import org.json.JSONObject;
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment {
-    private TextView overview;
+    private ExpandableTextView overview;
+    private ImageView poster;
     private TextView releaseDate;
     private TextView title;
     private TextView userRating;
     private ImageView imageView;
     private ImageButton favoriteButton;
-    private String imageBaseUrl = "http://image.tmdb.org/t/p/w780/";
+    private String posterImageBaseURL = "http://image.tmdb.org/t/p/w185";
+    private String imageBaseUrl = "http://image.tmdb.org/t/p/w500/";
     MovieObj intentMovie = null;
     String baseApi = "http://api.themoviedb.org/3/movie/";
     String endTrailerURL = "/videos?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
@@ -55,26 +56,33 @@ public class DetailActivityFragment extends Fragment {
         final SQLiteDatabase database = openHelper.getWritableDatabase();
 
         getVideos();
-        fetchReviews();
+        /*fetchReviews();*/
+
+
 
 
         final Intent intent = getActivity().getIntent();
         intentMovie = (MovieObj) intent.getSerializableExtra("MovieObject");
 
 
-        overview = (TextView) rootView.findViewById(R.id.movie_overview);
+        overview = (ExpandableTextView) rootView.findViewById(R.id.movie_overview).findViewById(R.id.expand_text_view);
         releaseDate = (TextView) rootView.findViewById(R.id.movie_release_date);
         title = (TextView) rootView.findViewById(R.id.movie_title);
         userRating = (TextView) rootView.findViewById(R.id.movie_user_rating);
         imageView = (ImageView) rootView.findViewById(R.id.imageView2);
         favoriteButton = (ImageButton) rootView.findViewById(R.id.favorites_button);
+        poster = (ImageView) rootView.findViewById(R.id.detail_poster);
+
 
 
         overview.setText(intentMovie.getOverview());
         title.setText(intentMovie.getOriginal_title());
         releaseDate.setText(intentMovie.getRelease_date());
         userRating.setText(intentMovie.getVote_average());
+
+
         Picasso.with(getActivity()).load(imageBaseUrl + intentMovie.getBackdrop_path()).into(imageView);
+        Picasso.with(getActivity()).load(posterImageBaseURL + intentMovie.getPoster_path()).into(poster);
 
 
         if (openHelper.isFavorite(intentMovie))
@@ -231,42 +239,41 @@ public class DetailActivityFragment extends Fragment {
                                     isSet = false;
                                 }
                             }
-                            if(!isSet)
+                            /*if(!isSet)
                                 {
                                     LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
-                                    /*View view = getActivity().findViewById(R.id.hline3);*/
+                                    *//*View view = getActivity().findViewById(R.id.hline3);*//*
 
 
                                     layout.removeView(imageButton[1]);
                                     layout.removeView(textView[1]);
-                                    /*layout.removeView(view);*/
+                                    *//*layout.removeView(view);*//*
                                 }
                             else if (jsonArray.length() == 1)
                                     {
                                         LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
-                                        /*View view = getActivity().findViewById(R.id.hline3);*/
+                                        *//*View view = getActivity().findViewById(R.id.hline3);*//*
 
 
                                         layout.removeView(imageButton[1]);
                                         layout.removeView(textView[1]);
-                                        /*layout.removeView(view);*/
+                                        *//*layout.removeView(view);*//*
                                     }
 
                             else if (jsonArray == null)
                             {
                                 LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.linearlayout);
-                                LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.trailer_layout);
-                                /*View view = getActivity().findViewById(R.id.hline3);*/
-                                View view1 = getActivity().findViewById(R.id.hline2);
+                               *//* LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.trailer_layout);*//*
+                                *//*View view = getActivity().findViewById(R.id.hline3);*//*
 
 
-                                linearLayout.removeView(imageButton[0]);
-                                linearLayout.removeView(textView[0]);
-                                linearLayout.removeView(view1);
+
+                                *//*linearLayout.removeView(imageButton[0]);
+                                linearLayout.removeView(textView[0]);*//*
                                 layout.removeView(imageButton[1]);
                                 layout.removeView(textView[1]);
-                                /*layout.removeView(view);*/
-                            }
+                                *//*layout.removeView(view);*//*
+                            }*/
 
                             System.out.println("This is i: " + i);
 
@@ -284,7 +291,7 @@ public class DetailActivityFragment extends Fragment {
         });
     }
 
-    public void fetchReviews()
+    /*public void fetchReviews()
     {
         String url = fetchReviewsURL();
 
@@ -300,8 +307,8 @@ public class DetailActivityFragment extends Fragment {
                     jsonArray = response.getJSONArray("results");
                     System.out.println(jsonArray);
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        /*TextView authorTextview = (TextView) getActivity().findViewById(R.id.author);
-                        TextView contentTextview = (TextView) getActivity().findViewById(R.id.content);*/
+                        *//*TextView authorTextview = (TextView) getActivity().findViewById(R.id.author);
+                        TextView contentTextview = (TextView) getActivity().findViewById(R.id.content);*//*
                         ExpandableTextView textView = (ExpandableTextView) getActivity().findViewById(R.id.review1).findViewById(R.id.expand_text_view);
                         TextView textView1 = (TextView) getActivity().findViewById(R.id.review1).findViewById(R.id.title);
                         JSONObject object = jsonArray.getJSONObject(i);
@@ -309,9 +316,9 @@ public class DetailActivityFragment extends Fragment {
                         String author = object.getString("author");
                         System.out.println(content);
 
-                        if (object != null) {/*
+                        if (object != null) {*//*
                             authorTextview.setText(author);
-                            contentTextview.setText(content);*/
+                            contentTextview.setText(content);*//*
                             textView.setText(content);
                             textView1.setText(author);
                         }
@@ -322,7 +329,7 @@ public class DetailActivityFragment extends Fragment {
                 }
             }
         });
-    }
+    }*/
 
 
 

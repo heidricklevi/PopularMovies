@@ -8,6 +8,12 @@
         <item name="android:colorAccent">@color/accent</item>
         <item name="android:navigationBarColor">@color/primary_dark</item>
         <item name="android:displayOptions">disableHome</item>
+
+    </style>
+
+    <style name="AppTheme." parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
 </resources>

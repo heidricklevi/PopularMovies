@@ -3,3 +3,6 @@
     class = "com.heidritech.popularmovies.DetailActivityFragment"
     tools:layout="@layout/fragment_detail" android:layout_width="match_parent"
     android:layout_height="match_parent" />
+
+
+

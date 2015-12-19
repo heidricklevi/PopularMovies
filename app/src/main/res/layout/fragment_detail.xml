@@ -23,120 +23,124 @@
             android:id="@+id/imageView2"
             android:scaleType="fitXY"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/no_poseter_found">
+            android:src="@drawable/bond">
         </ImageView>
 
-            <TextView
-                android:id="@+id/movie_title"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:minHeight="?attr/actionBarSize"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="title"
-                android:textStyle="bold"
-                android:textSize="@dimen/abc_text_size_large_material"
-                android:layout_alignParentBottom="true"
-                android:textColor="#FFF"/>
+                app:titleTextColor="@android:color/white"
+                android:background="@color/toolbarTransparent">
+            </android.support.v7.widget.Toolbar>
 
-<!--            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/favorites_button"
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:src="@drawable/button_custom"
-                app:layout_anchor="@id/relative_imag"
-                app:layout_anchorGravity="bottom|right|end"
-                android:layout_gravity="right"
-                android:saveEnabled="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />-->
+                android:src="@drawable/ic_play_circle_filled_black_36dp"
+                android:id="@+id/relative_play"
+                style="?android:borderlessButtonStyle"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+
 
 
 
         </RelativeLayout>
 
 
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="8dp"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip"
-            android:layout_marginTop="2dip">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:id="@+id/movie_overview"
-                    android:text="overview"
-                    android:textAlignment="textEnd"
-                    android:padding="3dp"
-                    android:textSize="@dimen/abc_text_size_small_material"
-                    android:paddingTop="3dp"
-                    android:gravity="fill_horizontal|bottom"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    tools:ignore="RtlCompat" />
+            <ImageView
+                android:layout_width="131dp"
+                android:id="@+id/detail_poster"
+                android:layout_height="185dp"
+                android:src="@drawable/interstell"
+                android:padding="8dp"
+                android:elevation="8dp"/>
 
                 <TextView
+                    android:id="@+id/movie_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="title"
+                    android:textStyle="bold"
+                    android:padding="8dp"
+                    android:textSize="@dimen/abc_text_size_medium_material"
+                    android:textColor="#100e0e"
+                    android:layout_toLeftOf="@+id/linearfav"
+                    android:layout_toRightOf="@+id/detail_poster"/>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:id="@+id/linearfav"
+    android:layout_alignParentRight="true">
+
+            <ImageButton
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_star_outline_black_24dp"
+                android:id="@+id/favorites_button"
+                style="?android:attr/borderlessButtonStyle" />
+</LinearLayout>
+</RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
                     android:text="rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/movie_user_rating"
-                    android:layout_below="@+id/movie_release_date" />
-
-                <TextView
-                android:text="release"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/movie_release_date"
-                    android:layout_gravity="end"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true" />
-
-
-                <!--<ImageButton
-                    android:layout_width="66dp"
-                    android:layout_height="66dp"
-                    android:id="@+id/favorites_button"
-                    android:background="@drawable/button_custom"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />-->
+                    android:layout_alignParentStart="true"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+        android:text="release"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/movie_release_date"
+                android:layout_gravity="center_horizontal"/>
+
+            <include
+                    android:id="@+id/movie_overview"
+                    layout="@layout/content_item">
+
+            </include>
 
 
-              <!--  <com.getbase.floatingactionbutton.AddFloatingActionButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"/>-->
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_star_outline_black_24dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:id="@+id/favorites_button"
-                    style="?android:attr/borderlessButtonStyle"/>
 
 
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+        <!--
+</RelativeLayout>-->
+        <!--</android.support.v7.widget.CardView>-->
 
 
 
@@ -157,41 +161,28 @@
             android:layout_alignParentStart="true"
             android:layout_weight="2.20" />-->
 
-       <!-- <View
+       <View
         android:id="@+id/hline1"
         android:layout_width="fill_parent"
-        android:layout_height="2dip"
-        android:background="#786a6a"
-        android:layout_below="@+id/movie_overview"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />-->
+        android:layout_height="1dip"
+        android:background="#9b9090"
+        android:layout_below="@+id/movie_overview" />
 
-        <android.support.v7.widget.CardView
+<!--        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:elevation="8dp"
             android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip">
+            android:layout_marginRight="2dip">-->
 
-        <LinearLayout
+ <!--       <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="3dp"
-            android:id="@+id/trailer_layout"
-            android:layout_weight="1">
+            android:id="@+id/trailer_layout">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:id="@+id/trailer_linear">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/play"
-                android:id="@+id/relative_play"
-                style="?android:borderlessButtonStyle" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -200,20 +191,13 @@
                 android:gravity="center"
                 android:text="TextView"/>
 
-            </LinearLayout>
-
-            <View
-                android:id="@+id/hline2"
-                android:layout_width="fill_parent"
-                android:layout_height="2dip"
-                android:background="#786a6a" />
 
 
-            <LinearLayout
+       <!--     <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="154dp"
                 android:orientation="horizontal"
-                android:id="@+id/linearlayout">
+                android:id="@+id/linearlayout">-->
 
 
 
@@ -232,9 +216,9 @@
                     android:text="TextView"/>
 
 
-            </LinearLayout>
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
+            <!--</LinearLayout>-->
+         <!--   </LinearLayout>-->
+        <!--</android.support.v7.widget.CardView>-->
 
 <!--
             <View
@@ -243,7 +227,7 @@
                 android:layout_height="2dip"
                 android:background="#786a6a" />-->
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reviews"
@@ -264,8 +248,8 @@
                     android:textColor="@color/accent_material_light"/>
 
 
-            </LinearLayout>
-
+            </LinearLayout>-->
+<!--
             <include
                 android:id="@+id/review1"
                 layout="@layout/content_item">
@@ -274,13 +258,8 @@
             <include
                 android:id="@+id/review2"
                 layout="@layout/content_item">
-            </include>
+            </include>-->
 
-<!--            <View
-                android:id="@+id/hline4"
-                android:layout_width="fill_parent"
-                android:layout_height="2dip"
-                android:background="#786a6a" />-->
 
         </LinearLayout>
 </ScrollView>

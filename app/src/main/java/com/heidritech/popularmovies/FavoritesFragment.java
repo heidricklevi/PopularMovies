@@ -2,6 +2,7 @@ package com.heidritech.popularmovies;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,12 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -39,7 +34,7 @@ public class FavoritesFragment extends Fragment {
         movieAdapter = new ImageAdapter(getActivity(),aMovies);
         gridView.setAdapter(movieAdapter);
 
-        favNetworkCall("254128");
+        new getFavsTask().execute();
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -54,30 +49,6 @@ public class FavoritesFragment extends Fragment {
         return view;
     }
 
-    public void favNetworkCall(String movieID)
-    {
-        String baseApi = "http://api.themoviedb.org/3/movie/";
-        String api_K = "?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
-        String url = baseApi + movieID + api_K;
-
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get(url, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-
-                ArrayList<MovieObj> movieObjs = getMarkedFavs();
-
-                for (MovieObj obj : movieObjs)
-                    movieAdapter.add(obj);
-
-            }
-        });
-    }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
@@ -89,8 +60,10 @@ public class FavoritesFragment extends Fragment {
         super.onResume();
 
         movieAdapter.clear();
-        favNetworkCall("254128");
+        getFavsTask task = new getFavsTask();
+        task.doInBackground();
     }
+
 
     public ArrayList<MovieObj> getMarkedFavs()
     {
@@ -130,6 +103,44 @@ public class FavoritesFragment extends Fragment {
         return obj;
     }
 
+   /* public void favNetworkCall(String movieID)
+    {*/
+        /*String baseApi = "http://api.themoviedb.org/3/movie/";
+        String api_K = "?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
+        String url = baseApi + movieID + api_K;
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(url, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+
+                ArrayList<MovieObj> movieObjs = getMarkedFavs();
+
+                for (MovieObj obj : movieObjs)
+                    movieAdapter.add(obj);
+
+            }
+        });*/
+    //}
+private class getFavsTask extends AsyncTask<Void, Void, Void>
+{
+
+    @Override
+    protected Void doInBackground(Void... params) {
+
+        ArrayList<MovieObj> movieObjs = getMarkedFavs();
+
+        for (MovieObj obj : movieObjs)
+            movieAdapter.add(obj);
+
+
+        return null;
+
+    }
+}
 
 
 
