@@ -14,10 +14,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                fragment = new FavoritesFragment();
+                fragment = new gridFragment();
                 break;
             case 1:
-                fragment = new gridFragment();
+                fragment = new FavoritesFragment();
                 break;
         }
         return fragment;
@@ -34,9 +34,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return ("Favorites");
+                return ("Popular");
             case 1:
-                return ("Main");
+                return ("Favorites");
 
         }
 

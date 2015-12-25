@@ -19,6 +19,7 @@ public class MovieObj implements Serializable {
     private String release_date;
     private String movieID;
     private String backdrop_path;
+    private ArrayList<String> genres;
 
     public String getPoster_path() {
         return poster_path;
@@ -41,6 +42,8 @@ public class MovieObj implements Serializable {
     }
 
     public String getMovieID() {return movieID;}
+
+    public ArrayList<String> getGenres() {return genres;}
 
     public String getBackdrop_path() {return backdrop_path;}
 
@@ -81,7 +84,6 @@ public class MovieObj implements Serializable {
      */
     public static MovieObj deserialize(JSONObject jsonObject) throws JSONException {
         MovieObj movie = new MovieObj();
-
         movie.original_title = jsonObject.getString("original_title");
         movie.overview = jsonObject.getString("overview");
         movie.poster_path = jsonObject.getString("poster_path");
@@ -89,7 +91,15 @@ public class MovieObj implements Serializable {
         movie.vote_average = jsonObject.getString("vote_average");
         movie.movieID = jsonObject.getString("id");
         movie.backdrop_path = jsonObject.getString("backdrop_path");
+       /* JSONArray jsonArray = jsonObject.getJSONArray("genre_ids");*/
+       /* for(int i = 0; i < jsonArray.length(); i++){
 
+            ArrayList<String> local = new ArrayList<>();
+            local = movie.genres;
+
+            local.add(jsonArray.getString(i));
+        }
+*/
         return movie;
 
     }

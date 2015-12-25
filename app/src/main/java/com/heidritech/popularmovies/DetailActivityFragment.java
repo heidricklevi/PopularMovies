@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,8 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -41,6 +45,7 @@ public class DetailActivityFragment extends Fragment {
     private String posterImageBaseURL = "http://image.tmdb.org/t/p/w185";
     private String imageBaseUrl = "http://image.tmdb.org/t/p/w500/";
     MovieObj intentMovie = null;
+    String api_key = "?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
     String baseApi = "http://api.themoviedb.org/3/movie/";
     String endTrailerURL = "/videos?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
     String endReviewsURL = "/reviews?api_key=13ebc35e0c6a99a673ac605b5e7f3710";
@@ -57,12 +62,15 @@ public class DetailActivityFragment extends Fragment {
 
         getVideos();
         /*fetchReviews();*/
+        getMovieRuntime();
+
 
 
 
 
         final Intent intent = getActivity().getIntent();
         intentMovie = (MovieObj) intent.getSerializableExtra("MovieObject");
+        /*System.out.println(intentMovie.getGenres());*/
 
 
         overview = (ExpandableTextView) rootView.findViewById(R.id.movie_overview).findViewById(R.id.expand_text_view);
@@ -77,7 +85,7 @@ public class DetailActivityFragment extends Fragment {
 
         overview.setText(intentMovie.getOverview());
         title.setText(intentMovie.getOriginal_title());
-        releaseDate.setText(intentMovie.getRelease_date());
+        releaseDate.setText(formattedDate(intentMovie.getRelease_date()));
         userRating.setText(intentMovie.getVote_average());
 
 
@@ -127,8 +135,57 @@ public class DetailActivityFragment extends Fragment {
             }
         });
 
-
         return rootView;
+    }
+
+    public String formattedDate(String date)
+    {
+        String formattedDate;
+        int hyp2 = date.lastIndexOf('-');
+        String year = date.substring(0,4);
+        String month = date.substring(5, hyp2);
+
+        switch(month){
+            case "01":
+                month = "January";
+                break;
+            case "02":
+                month = "February";
+                break;
+            case "03":
+                month = "March";
+                break;
+            case "04":
+                month = "April";
+                break;
+            case "05":
+                month = "May";
+                break;
+            case "06":
+                month = "June";
+                break;
+            case "07":
+                month = "July";
+                break;
+            case "08":
+                month = "August";
+                break;
+            case "09":
+                month = "September";
+                break;
+            case "10":
+                month = "October";
+                break;
+            case "11":
+                month = "November";
+                break;
+            case "12":
+                month = "December";
+        }
+
+        formattedDate = month + " " + year;
+
+        return formattedDate;
     }
 
 
@@ -149,6 +206,128 @@ public class DetailActivityFragment extends Fragment {
         String url = baseApi + movieObj.getMovieID() + endReviewsURL;
 
         return url;
+    }
+
+    public String fetchMovieInfoURL()
+    {
+        MovieObj obj = null;
+        Intent intent = getActivity().getIntent();
+        obj = (MovieObj) intent.getSerializableExtra("MovieObject");
+        String url = baseApi + obj.getMovieID() + api_key;
+
+        return url;
+    }
+
+    public void getMovieRuntime()
+    {
+        String url = fetchMovieInfoURL();
+        final TextView [] textView = new TextView[1];
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(url, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+
+                JSONArray jsonArray = null;
+
+                try {
+                    String runtime = response.getString("runtime");
+                    System.out.println("Runtime: " + runtime);
+                    textView[0] = (TextView) getActivity().findViewById(R.id.runtime);
+                    textView[0].setText(runtime + " Minutes");
+
+                    jsonArray = response.getJSONArray("genres");
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+                        LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(R.id.movie_overview).findViewById(R.id.content_linear);
+                        RelativeLayout relativeLayout = new RelativeLayout(getActivity());
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                        linearLayout.addView(relativeLayout);
+
+
+                        HashMap<String, String> map = new HashMap<String, String>();
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                        String idKey = object.getString("id");
+                        String valueName = object.getString("name");
+
+                        map.put(idKey, valueName);
+
+                        ImageButton imageButton = new ImageButton(getActivity());
+                        TextView textView1 = new TextView(getActivity());
+                        imageButton.setImageResource(movieGenreIcon(map));
+                        imageButton.setId(Integer.parseInt(idKey));
+                        imageButton.setBackground(null);
+                        relativeLayout.addView(imageButton);
+
+                        textView1.setText(valueName);
+                        textView1.setTextAppearance(getActivity(), android.R.style.TextAppearance_Holo_Small);
+                        layoutParams.addRule(RelativeLayout.BELOW, imageButton.getId());
+                        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, imageButton.getId());
+                        textView1.setLayoutParams(layoutParams);
+                        relativeLayout.addView(textView1);
+
+
+                        System.out.println("Map: " + map);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+    }
+
+    public static int movieGenreIcon(HashMap<String,String> ID)
+    {
+        if (ID.containsKey("28")){
+            return R.drawable.action;
+        } else if (ID.containsKey("12")){
+            return R.drawable.adventures50;
+        } else if (ID.containsKey("16")){
+            return R.drawable.animation50;
+        } else if (ID.containsKey("35")){
+            return R.drawable.comedy;
+        } else if (ID.containsKey("80")){
+            return R.drawable.crime;
+        } else if (ID.containsKey("99")){
+            return R.drawable.documentary;
+        } else if (ID.containsKey("18")){
+            return R.drawable.drama50;
+        } else if (ID.containsKey("10751")){
+            return R.drawable.family;
+        } else if (ID.containsKey("14")){
+            return R.drawable.fantasy50;
+        } else if (ID.containsKey("10769")){
+            return R.drawable.stevejobs50;
+        } else if (ID.containsKey("53")) {
+            return R.drawable.thriller50;
+        } else if (ID.containsKey("36")) {
+            return R.drawable.historical;
+        } else if (ID.containsKey("27")){
+            return R.drawable.horror;
+        } else if (ID.containsKey("10402")){
+            return R.drawable.musical50;
+        } else if (ID.containsKey("9648")) {
+            return R.drawable.spy50;
+        } else if (ID.containsKey("10749")) {
+            return R.drawable.novel50;
+        } else if (ID.containsKey("878")){
+            return R.drawable.scifi50;
+        } else if (ID.containsKey("37")){
+            return R.drawable.western50;
+        }
+
+        return -1;
+    }
+
+    public String runTime(String runtime)
+    {
+        return runtime;
     }
 
     public String videoName(String videoName)

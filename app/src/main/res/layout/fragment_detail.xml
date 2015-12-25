@@ -84,9 +84,32 @@
                     android:textStyle="bold"
                     android:padding="8dp"
                     android:textSize="@dimen/abc_text_size_medium_material"
-                    android:textColor="#100e0e"
+                    android:textColor="#0e0e0e"
                     android:layout_toLeftOf="@+id/linearfav"
                     android:layout_toRightOf="@+id/detail_poster"/>
+
+                    <TextView
+                        android:text="release"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textStyle="normal"
+                        android:id="@+id/movie_release_date"
+                        android:layout_toRightOf="@+id/detail_poster"
+                        android:layout_below="@+id/movie_title"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#616161" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="runtime"
+                        android:layout_toRightOf="@+id/detail_poster"
+                        android:layout_below="@id/movie_release_date"
+                        android:paddingLeft="8dp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:id="@+id/runtime"/>
 
 <LinearLayout
     android:layout_width="wrap_content"
@@ -118,13 +141,7 @@
                     android:layout_alignParentStart="true"
                 android:layout_gravity="center_horizontal" />
 
-            <TextView
-        android:text="release"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/movie_release_date"
-                android:layout_gravity="center_horizontal"/>
+
 
             <include
                     android:id="@+id/movie_overview"

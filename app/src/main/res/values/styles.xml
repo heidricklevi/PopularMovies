@@ -16,4 +16,9 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="small_text">
+        <item name="android:textSize">@style/Base.TextAppearance.AppCompat.Small</item>
+    </style>
+
+
 </resources>
