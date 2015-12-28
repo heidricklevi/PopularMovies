@@ -19,5 +19,6 @@ public class MovieContract {
         public static final String COL_RELEASE = "release_date";
         public static final String MOVIE_ID = "movie_id";
         public static final String COL_BACKDROP = "backdrop_path";
+        public static final String COL_VOTE_COUNT = "vote_count";
     }
 }

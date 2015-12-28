@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class FavoritesFragment extends Fragment {
 
     private String[] columns = {MovieContract.columns.MOVIE_ID, MovieContract.columns.COL_BACKDROP,MovieContract.columns.COL_TITLE, MovieContract.columns.COL_POSTER, MovieContract.columns.COL_RELEASE,
-            MovieContract.columns.COL_VOTE, MovieContract.columns.COL_OVERVIEW};
+            MovieContract.columns.COL_VOTE, MovieContract.columns.COL_OVERVIEW, MovieContract.columns.COL_VOTE_COUNT};
     private GridView gridView;
     private ImageAdapter movieAdapter;
 
@@ -99,6 +99,7 @@ public class FavoritesFragment extends Fragment {
         obj.setRelease_date(cursor.getString(4));
         obj.setVote_average(cursor.getString(5));
         obj.setOverview(cursor.getString(6));
+        obj.setVote_count(cursor.getString(7));
 
         return obj;
     }

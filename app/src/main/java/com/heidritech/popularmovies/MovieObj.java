@@ -16,10 +16,12 @@ public class MovieObj implements Serializable {
     private String original_title;
     private String overview;
     private String vote_average;
+    private String vote_count;
     private String release_date;
     private String movieID;
     private String backdrop_path;
-    private ArrayList<String> genres;
+    private String runtime;
+
 
     public String getPoster_path() {
         return poster_path;
@@ -41,9 +43,15 @@ public class MovieObj implements Serializable {
         return release_date;
     }
 
+    public String getVote_count(){return vote_count;}
+
     public String getMovieID() {return movieID;}
 
-    public ArrayList<String> getGenres() {return genres;}
+    public String getRuntime() {
+        return runtime;
+    }
+
+
 
     public String getBackdrop_path() {return backdrop_path;}
 
@@ -75,6 +83,10 @@ public class MovieObj implements Serializable {
         this.vote_average = vote_average;
     }
 
+    public void setVote_count(String vote_count) {
+        this.vote_count = vote_count;
+    }
+
     public MovieObj (){}
 
 
@@ -91,6 +103,9 @@ public class MovieObj implements Serializable {
         movie.vote_average = jsonObject.getString("vote_average");
         movie.movieID = jsonObject.getString("id");
         movie.backdrop_path = jsonObject.getString("backdrop_path");
+        movie.vote_count = jsonObject.getString("vote_count");
+        /*movie.runtime = jsonObject.getString("runtime");*/
+
        /* JSONArray jsonArray = jsonObject.getJSONArray("genre_ids");*/
        /* for(int i = 0; i < jsonArray.length(); i++){
 

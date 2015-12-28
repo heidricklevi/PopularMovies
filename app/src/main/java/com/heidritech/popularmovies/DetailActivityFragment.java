@@ -38,6 +38,7 @@ public class DetailActivityFragment extends Fragment {
     private ExpandableTextView overview;
     private ImageView poster;
     private TextView releaseDate;
+    private TextView voteCount;
     private TextView title;
     private TextView userRating;
     private ImageView imageView;
@@ -80,6 +81,7 @@ public class DetailActivityFragment extends Fragment {
         imageView = (ImageView) rootView.findViewById(R.id.imageView2);
         favoriteButton = (ImageButton) rootView.findViewById(R.id.favorites_button);
         poster = (ImageView) rootView.findViewById(R.id.detail_poster);
+        voteCount = (TextView) rootView.findViewById(R.id.vote_count);
 
 
 
@@ -87,6 +89,7 @@ public class DetailActivityFragment extends Fragment {
         title.setText(intentMovie.getOriginal_title());
         releaseDate.setText(formattedDate(intentMovie.getRelease_date()));
         userRating.setText(intentMovie.getVote_average());
+        voteCount.setText(formattedVoteCount(intentMovie.getVote_count()));
 
 
         Picasso.with(getActivity()).load(imageBaseUrl + intentMovie.getBackdrop_path()).into(imageView);
@@ -95,11 +98,11 @@ public class DetailActivityFragment extends Fragment {
 
         if (openHelper.isFavorite(intentMovie))
         {
-            favoriteButton.setImageResource(R.drawable.star);
+            favoriteButton.setImageResource(R.drawable.ticketstarred);
         }
         else
         {
-            favoriteButton.setImageResource(R.drawable.star_outline);
+            favoriteButton.setImageResource(R.drawable.ticketadd);
         }
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
@@ -115,27 +118,52 @@ public class DetailActivityFragment extends Fragment {
                     contentValues.put(MovieContract.columns.COL_RELEASE, intentMovie.getRelease_date());
                     contentValues.put(MovieContract.columns.COL_VOTE, intentMovie.getVote_average());
                     contentValues.put(MovieContract.columns.COL_OVERVIEW, intentMovie.getOverview());
+                    contentValues.put(MovieContract.columns.COL_VOTE_COUNT, intentMovie.getVote_count());
 
                     database.insert(MovieContract.columns.TABLE_NAME, null, contentValues);
-                    favoriteButton.setImageResource(R.drawable.star);
+                    favoriteButton.setImageResource(R.drawable.ticketstarred);
 
                     Toast.makeText(getContext(), "Successfully Added " + intentMovie.getOriginal_title() + " To Favorites! ", Toast.LENGTH_SHORT).show();
-                }
-
-                else if (openHelper.isFavorite(intentMovie))
-                {
-                    favoriteButton.setImageResource(R.drawable.star_outline);
+                } else if (openHelper.isFavorite(intentMovie)) {
+                    favoriteButton.setImageResource(R.drawable.ticketadd);
                     int deleteRows = database.delete(MovieContract.columns.TABLE_NAME, MovieContract.columns.MOVIE_ID + "= ?", new String[]{intentMovie.getMovieID()});
 
-                        Context context = getContext();
-                        Toast.makeText(context, "Successfully Removed " + intentMovie.getOriginal_title() + " From Favorites!", Toast.LENGTH_SHORT).show();
+                    Context context = getContext();
+                    Toast.makeText(context, "Successfully Removed " + intentMovie.getOriginal_title() + " From Favorites!", Toast.LENGTH_SHORT).show();
 
                     System.out.println("Deleted " + deleteRows + " records.");
                 }
             }
         });
 
+
         return rootView;
+    }
+    
+    public String formattedVoteCount(String voteCount)
+    {
+        String commaFieldNum = "";
+
+        for (int i = 0; i < voteCount.length(); i++)
+        {
+            if (Integer.parseInt(voteCount) <= 999){
+                
+                return voteCount;
+            }
+
+            int x = voteCount.length();
+
+            if ((x - i)%3 == 0 && i != 0){
+
+                commaFieldNum += ",";
+            }
+
+            commaFieldNum += voteCount.charAt(i);
+
+
+        }
+
+        return commaFieldNum;
     }
 
     public String formattedDate(String date)
@@ -252,6 +280,11 @@ public class DetailActivityFragment extends Fragment {
 
                         String idKey = object.getString("id");
                         String valueName = object.getString("name");
+
+                        if (valueName.equalsIgnoreCase("Science Fiction")){
+
+                            valueName = "Sci-Fi";
+                        }
 
                         map.put(idKey, valueName);
 

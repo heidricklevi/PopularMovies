@@ -34,7 +34,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:titleTextColor="@android:color/white"
-                android:background="@color/toolbarTransparent">
+                android:background="@color/toolbarTransparent"
+                android:paddingTop="10dp">
             </android.support.v7.widget.Toolbar>
 
             <ImageButton
@@ -65,7 +66,8 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detail_relative">
 
             <ImageView
                 android:layout_width="131dp"
@@ -111,6 +113,57 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:id="@+id/runtime"/>
 
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rating_relative"
+                        android:layout_toRightOf="@+id/detail_poster"
+                        android:layout_below="@+id/runtime"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="4dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/clapperboardbig"
+                        android:id="@+id/rating_image"/>
+
+                    <TextView
+                        android:text="rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:id="@+id/movie_user_rating"
+                        android:textColor="@color/text_color"
+                        android:textStyle="bold"
+                        android:layout_centerInParent="true"
+                        android:layout_alignStart="@id/rating_image"
+                        android:layout_alignBottom="@id/rating_image"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/star"
+                            android:layout_above="@+id/imageView"
+                            android:layout_alignEnd="@+id/rating_image" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/account"
+                            android:layout_below="@+id/rating_image"
+                            android:layout_toRightOf="@+id/vote_count"
+                            android:id="@+id/imageView" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/vote_count"
+                            android:text="11111"
+                            android:textSize="10sp"
+                            android:layout_below="@id/rating_image"
+                            android:layout_centerHorizontal="true"/>
+                    </RelativeLayout>
+
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -122,7 +175,7 @@
             <ImageButton
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_star_outline_black_24dp"
+                android:src="@drawable/ticketadd"
                 android:id="@+id/favorites_button"
                 style="?android:attr/borderlessButtonStyle" />
 </LinearLayout>
@@ -130,16 +183,6 @@
 
             </LinearLayout>
 
-            <TextView
-                    android:text="rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/movie_user_rating"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                android:layout_gravity="center_horizontal" />
 
 
 

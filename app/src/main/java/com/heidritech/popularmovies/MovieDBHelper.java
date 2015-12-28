@@ -20,6 +20,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
             MovieContract.columns.COL_BACKDROP + " TEXT NOT NULL, " +
             MovieContract.columns.COL_RELEASE + " TEXT NOT NULL, " +
             MovieContract.columns.COL_OVERVIEW + " TEXT NOT NULL, " +
+            MovieContract.columns.COL_VOTE_COUNT + " TEXT NOT NULL, " +
             MovieContract.columns.COL_VOTE + " REAL NOT NULL " + " );";
 
 
@@ -44,7 +45,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
     public boolean isFavorite(MovieObj obj)
     {
-        Cursor cursor = getWritableDatabase().query(MovieContract.columns.TABLE_NAME, new String[]{MovieContract.columns.MOVIE_ID}, obj.getMovieID(), null, null, null,null);
+        Cursor cursor = getWritableDatabase().query(MovieContract.columns.TABLE_NAME, new String[]{MovieContract.columns.MOVIE_ID}, obj.getMovieID(), null, null, null, null);
         if (cursor != null) {
 
             cursor.moveToFirst();
