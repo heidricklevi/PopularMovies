@@ -19,13 +19,15 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 fragment = new FavoritesFragment();
                 break;
+            case 2:
+                fragment = new TopRatedFragment();
         }
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -37,6 +39,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return ("Popular");
             case 1:
                 return ("Favorites");
+            case 2:
+                return ("Top Rated");
 
         }
 
